@@ -5,4 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProfileService.Model\ProfileService.Model.csproj" />
+  </ItemGroup>
 </Project>
