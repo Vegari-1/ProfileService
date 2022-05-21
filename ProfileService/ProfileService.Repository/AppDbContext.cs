@@ -7,10 +7,11 @@ namespace ProfileService.Repository
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
-        public DbSet<Profile> Profile { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Connection> Connections { get; set; }
         public DbSet<Education> Education { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<WorkExperience> WorkExperience { get; set; }
+        public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<ConnectionRequest> ConnectionRequests { get; set; }
     }
 }

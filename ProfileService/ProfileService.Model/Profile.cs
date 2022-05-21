@@ -16,7 +16,6 @@
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Biography { get; set; }
-        public ICollection<Profile> Connections { get; set; }
         public ICollection<Profile> Blocked { get; set; }
         public ICollection<Skill> Skills { get; set; }
         public ICollection<Education> Education { get; set; }
