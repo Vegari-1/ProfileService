@@ -1,8 +1,31 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProfileService.Middlewares;
+using ProfileService.Repository;
+using ProfileService.Repository.Interface;
+using ProfileService.Service;
+using ProfileService.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DislinktDbConnection")));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+//repositories
+builder.Services.AddScoped<IConnectionRequestRepository, ConnectionRequestRepository>();
+builder.Services.AddScoped<IEducationRepository, EducationRepository>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>();
+
+//services
+builder.Services.AddScoped<IConnectionRequestService, ConnectionRequestService>();
+builder.Services.AddScoped<IEducationService, EducationService>();
+builder.Services.AddScoped<IProfileService, ProfileService.Service.ProfileService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
@@ -25,6 +48,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();
 
