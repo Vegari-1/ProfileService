@@ -5,4 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProfileService.Service.Interface\ProfileService.Service.Interface.csproj" />
+    <ProjectReference Include="..\ProfileService.Repository.Interface\ProfileService.Repository.Interface.csproj" />
+  </ItemGroup>
 </Project>
