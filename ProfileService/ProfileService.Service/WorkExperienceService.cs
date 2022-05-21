@@ -4,7 +4,7 @@ namespace ProfileService.Service
 {
 	public class WorkExperienceService : IWorkExperienceService
 	{
-		public WorkEcperienceService()
+		public WorkExperienceService()
 		{
 		}
 	}
