@@ -1,4 +1,6 @@
-﻿namespace ProfileService.Service.Interface.Exceptions
+﻿using System;
+
+namespace ProfileService.Service.Interface.Exceptions
 {
 	public class BaseException : Exception
 	{

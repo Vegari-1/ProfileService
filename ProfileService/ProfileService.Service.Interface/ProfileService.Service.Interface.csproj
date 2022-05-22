@@ -9,6 +9,6 @@
     <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Exceptions\" />
+    <ProjectReference Include="..\ProfileService.Model\ProfileService.Model.csproj" />
   </ItemGroup>
 </Project>

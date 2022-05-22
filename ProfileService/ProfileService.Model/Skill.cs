@@ -1,4 +1,6 @@
-﻿namespace ProfileService.Model
+﻿using System;
+
+namespace ProfileService.Model
 {
 	public class Skill
 	{
