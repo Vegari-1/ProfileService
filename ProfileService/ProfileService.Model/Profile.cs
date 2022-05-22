@@ -1,4 +1,7 @@
-﻿namespace ProfileService.Model
+﻿using System;
+using System.Collections.Generic;
+
+namespace ProfileService.Model
 {
     public enum Gender
     {
