@@ -26,6 +26,7 @@ builder.Services.AddScoped<IProfileService, ProfileService.Service.ProfileServic
 builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
