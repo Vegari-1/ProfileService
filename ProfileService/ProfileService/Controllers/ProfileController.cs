@@ -26,9 +26,6 @@ namespace ProfileService.Controllers
             Model.Profile profile = await _profileService.GetById(id);
             
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
-            profileResponse.Education = _mapper.Map<ICollection<EducationResponse>>(profile.Education);
-            profileResponse.WorkExperiences = _mapper.Map<ICollection<WorkExperienceResponse>>(profile.WorkExperiences);
-            profileResponse.Skills = _mapper.Map<ICollection<SkillResponse>>(profile.Skills);
 
             return Ok(profileResponse);
         }
