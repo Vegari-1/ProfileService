@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace ProfileService.Service.Interface.Exceptions
 {

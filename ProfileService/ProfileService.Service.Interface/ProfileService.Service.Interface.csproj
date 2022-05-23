@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProfileService.Model\ProfileService.Model.csproj" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

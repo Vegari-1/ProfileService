@@ -1,4 +1,4 @@
-﻿using ProfileService.Model;
+using ProfileService.Model;
 using ProfileService.Repository.Interface;
 using ProfileService.Service.Interface;
 using System;
@@ -9,7 +9,6 @@ namespace ProfileService.Service
 {
 	public class ProfileService : IProfileService
 	{
-
         private readonly IProfileRepository _profileRepository;
 
 		public ProfileService(IProfileRepository profileRepository)

@@ -4,7 +4,7 @@ using ProfileService.Service.Interface.Exceptions;
 
 namespace ProfileService.Middlewares
 {
-    public class ExceptionHandlerMiddleware
+	public class ExceptionHandlerMiddleware
 	{
         private readonly RequestDelegate _next;
 

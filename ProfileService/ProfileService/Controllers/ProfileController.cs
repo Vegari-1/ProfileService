@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.Dto;
 using ProfileService.Service.Interface;
@@ -29,6 +29,5 @@ namespace ProfileService.Controllers
 
             return Ok(profileResponse);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProfileService.Model;
 using ProfileService.Repository.Interface;
 using System;
