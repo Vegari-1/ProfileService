@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace ProfileService.Model
+﻿namespace ProfileService.Dto
 {
-	public class Skill
-	{
+    public class SkillResponse
+    {
         public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }
-

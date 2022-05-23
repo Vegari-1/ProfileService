@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace ProfileService.Model
+﻿namespace ProfileService.Dto
 {
-	public class Education
-	{
+    public class EducationResponse
+    {
         public Guid Id { get; set; }
         public string School { get; set; }
         public string Degree { get; set; }
@@ -12,4 +10,3 @@ namespace ProfileService.Model
         public DateTime EndDate { get; set; }
     }
 }
-

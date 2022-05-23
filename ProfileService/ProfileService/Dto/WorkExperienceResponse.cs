@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace ProfileService.Model
+﻿namespace ProfileService.Dto
 {
-	public class WorkExperience
-	{
+    public class WorkExperienceResponse
+    {
         public Guid Id { get; set; }
         public string Position { get; set; }
         public string Company { get; set; }
@@ -11,4 +9,3 @@ namespace ProfileService.Model
         public DateTime EndDate { get; set; }
     }
 }
-
