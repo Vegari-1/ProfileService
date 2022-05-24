@@ -1,5 +1,5 @@
 module.exports = {
-	branches: ["develop", "main"],
+	branches: ["main", {"name": "develop", "prerelease": true}],
 	repositoryUrl: "https://github.com/Vegari-1/ProfileService",
 	plugins: [
 		"@semantic-release/commit-analyzer", // analizira komit poruke i odredjuje narednu verziju
