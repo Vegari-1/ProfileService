@@ -24,11 +24,14 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Cache Dependencies
+      - name : Lint commit messages
+        uses: wagoid/commitlint-github-action@v4
+
+      - name: Cache Dependencies NuGet
         uses: actions/cache@v3
         with:
-          path: ~/.nuget/packages # lokacija kesa za nuget u okviru linux masine (dokumentaciji actions/cache@v3)
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/package-lock.json')}} # kljuc pod kojim je kes sacuvan (kreira se novi za svaku promenu dependensija)
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/package-lock.json')}}
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Install Dependencies
@@ -36,7 +39,7 @@ jobs:
         run: dotnet restore
       - name: Build App
         working-directory: ${{ env.PROJ_DIR }}
-        run: dotnet build --configuration Release --no-restore # bilduje aplikaciju za po Release konfiguraciji i bez pozivanja dotnet restore pre bilda
+        run: dotnet build --configuration Release --no-restore
       - name: Run Tests
         working-directory: ${{ env.PROJ_DIR }}
         run: dotnet test --no-restore --verbosity normal
@@ -77,3 +80,5 @@ jobs:
           context: ${{ env.PROJ_DIR }}
           tags: ${{ format('{0}:{1}', env.DOCKERHUB_REPO, steps.version.outputs.new-release-version) }}
           push: true
+          cache-from: type=registry,ref=${{ env.DOCKERHUB_REPO }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKERHUB_REPO }}:buildcache,mode=max
