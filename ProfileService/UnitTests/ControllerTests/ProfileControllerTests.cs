@@ -11,6 +11,7 @@ using ProfileService.Dto;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.Service.Interface.Exceptions;
 using System.Collections.Generic;
+using OpenTracing;
 
 namespace ProfileService.UnitTests.ControllerTests
 {
@@ -42,8 +43,9 @@ namespace ProfileService.UnitTests.ControllerTests
 
         private static Mock<IProfileService> mockService = new Mock<IProfileService>();
         private static Mock<IMapper> mockMapper = new Mock<IMapper>();
+        private static Mock<ITracer> mockTracer = new Mock<ITracer>();
 
-        ProfileController profileController = new ProfileController(mockService.Object, mockMapper.Object);
+        ProfileController profileController = new ProfileController(mockService.Object, mockMapper.Object, mockTracer.Object);
 
         private static void SetUp()
         {
