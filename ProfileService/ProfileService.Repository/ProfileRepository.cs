@@ -2,6 +2,7 @@
 using ProfileService.Model;
 using ProfileService.Repository.Interface;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,25 @@ namespace ProfileService.Repository
                                 .Include(x => x.Skills)
                                 .Include(x => x.WorkExperiences)
                                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Profile>> GetByPublic(bool isPublic)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Public == isPublic)
+                                .Include(x => x.Image)
+                                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Public == isPublic)
+                                .Where(x => x.Username.Contains(query) 
+                                            || x.Name.Contains(query) 
+                                            || x.Surname.Contains(query))
+                                .Include(x => x.Image)
+                                .ToListAsync();
         }
     }
 }
