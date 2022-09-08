@@ -41,9 +41,11 @@ namespace ProfileService.Repository
         {
             return await _context.Profiles
                                 .Where(x => x.Public == isPublic)
-                                .Where(x => x.Username.Contains(query) 
-                                            || x.Name.Contains(query) 
-                                            || x.Surname.Contains(query))
+                                .Where(x =>
+                                    x.Username.ToLower().Contains(query.ToLower())
+                                    || x.Name.ToLower().Contains(query.ToLower())
+                                    || x.Surname.ToLower().Contains(query.ToLower())
+                                )
                                 .Include(x => x.Image)
                                 .ToListAsync();
         }
