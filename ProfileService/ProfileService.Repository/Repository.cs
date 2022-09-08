@@ -1,4 +1,5 @@
 ﻿using ProfileService.Repository.Interface;
+using System.Threading.Tasks;
 
 namespace ProfileService.Repository
 {
@@ -9,6 +10,14 @@ namespace ProfileService.Repository
         public Repository(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<T> Save(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace ProfileService.Profiles
         public ProfileProfile()
         {
             // Source -> Target
+            CreateMap<ProfileRequest, Profile>();
             CreateMap<Profile, ProfileResponse>();
             CreateMap<Profile, ProfileSimpleResponse>()
                 .ForMember(dest => dest.Picture, src => src.MapFrom(s => s.Image.Content));
