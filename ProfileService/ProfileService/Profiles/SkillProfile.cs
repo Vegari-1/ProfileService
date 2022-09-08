@@ -7,6 +7,7 @@ namespace ProfileService.Profiles
     {
         public SkillProfile()
         {
+            CreateMap<SkillRequest, Skill>();
             CreateMap<Skill, SkillResponse>();
         }
     }
