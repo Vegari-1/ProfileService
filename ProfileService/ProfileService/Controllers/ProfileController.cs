@@ -26,9 +26,37 @@ namespace ProfileService.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> SearchPublicProfiles(bool isPublic, string? query)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("search public profiles");
+            counter.Inc();
+
+            IEnumerable<Model.Profile> profiles;
+            if (query != null)
+            {
+                profiles = await _profileService.GetByPublicAndQuery(isPublic, query);
+            } else
+            {
+                profiles = await _profileService.GetByPublic(isPublic);
+            }
+
+            IEnumerable<ProfileSimpleResponse> profilesResponse =
+                _mapper.Map<IEnumerable<ProfileSimpleResponse>>(profiles);
+
+            return Ok(profilesResponse);
+        }
+
+        [HttpGet]
         [Route("/{id}")]
         public async Task<IActionResult> GetProfile(Guid id)
         {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("profile by id");
+            counter.Inc();
+
             Model.Profile profile = await _profileService.GetById(id);
             
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
