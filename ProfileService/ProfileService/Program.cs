@@ -13,7 +13,21 @@ using OpenTracing.Contrib.NetCore.Configuration;
 using OpenTracing.Util;
 using Prometheus;
 
+var allowSpecificOrigins = "_allowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(allowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("http://localhost:3000")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                          });
+});
+
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -81,7 +95,9 @@ if (builder.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProfileService v1"));
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseCors(allowSpecificOrigins);
 
 app.UseAuthorization();
 
@@ -94,3 +110,7 @@ app.UseMetricServer();
 
 app.Run();
 
+namespace ProfileService
+{
+    public partial class Program { }
+}
