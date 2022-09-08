@@ -44,5 +44,27 @@ namespace ProfileService.Service
         {
             return await _profileRepository.GetByPublicAndQuery(isPublic, query);
         }
+
+        public async Task<Profile> Update(Guid id, Profile profile)
+        {
+            if (!id.Equals(profile.Id))
+                throw new ForbiddenException();
+
+            Profile dbProfile = await _profileRepository.GetById(id);
+
+            dbProfile.Public = profile.Public;
+            dbProfile.Name = profile.Name;
+            dbProfile.Surname = profile.Surname;
+            dbProfile.Username = profile.Username;
+            dbProfile.Email = profile.Email;
+            dbProfile.Phone = profile.Phone;
+            dbProfile.Gender = profile.Gender;
+            dbProfile.DateOfBirth = profile.DateOfBirth.Date;
+            dbProfile.Biography = profile.Biography;
+
+            await _profileRepository.SaveChanges();
+
+            return dbProfile;
+        }
     }
 }
