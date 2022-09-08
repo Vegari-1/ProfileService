@@ -48,21 +48,26 @@ namespace ProfileService.Controllers
             return Ok(profilesResponse);
         }
 
-        [HttpGet]
-        [Route("/{id}")]
-        public async Task<IActionResult> GetProfile(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> CreateProfile([FromBody] ProfileRequest profileRequest)
         {
-            Model.Profile profile = await _profileService.GetById(id);
-            
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("create profile");
+            counter.Inc();
+
+            Model.Profile profile = await _profileService.Create(_mapper.Map<Model.Profile>(profileRequest));
+
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
             return Ok(profileResponse);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProfile([FromBody] ProfileRequest profileRequest)
+        [HttpGet]
+        [Route("/{id}")]
+        public async Task<IActionResult> GetProfile(Guid id)
         {
-            Model.Profile profile = await _profileService.Create(_mapper.Map<Model.Profile>(profileRequest));
+            Model.Profile profile = await _profileService.GetById(id);
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
