@@ -18,6 +18,7 @@ namespace ProfileService.UnitTests.ServiceTests
         private static readonly bool profilePublic = true;
         private static readonly string name = "John";
         private static readonly string surname = "Smith";
+        private static readonly string username = "johnsmith";
         private static readonly string email = "email@example.com";
         private static readonly string phoneNumber = "1234567890";
         private static readonly Gender gender = Gender.FEMALE;
@@ -43,6 +44,7 @@ namespace ProfileService.UnitTests.ServiceTests
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
+                Username = username,
                 Email = email,
                 PhoneNumber = phoneNumber,
                 Gender = gender,
@@ -70,6 +72,7 @@ namespace ProfileService.UnitTests.ServiceTests
             Assert.Equal(savedProfile.Public, response.Public);
             Assert.Equal(savedProfile.Name, response.Name);
             Assert.Equal(savedProfile.Surname, response.Surname);
+            Assert.Equal(savedProfile.Username, response.Username);
             Assert.Equal(savedProfile.Email, response.Email);
             Assert.Equal(savedProfile.PhoneNumber, response.PhoneNumber);
             Assert.Equal(savedProfile.Gender, response.Gender);
