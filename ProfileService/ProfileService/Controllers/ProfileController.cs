@@ -52,11 +52,6 @@ namespace ProfileService.Controllers
         [Route("/{id}")]
         public async Task<IActionResult> GetProfile(Guid id)
         {
-            var actionName = ControllerContext.ActionDescriptor.DisplayName;
-            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
-            scope.Span.Log("profile by id");
-            counter.Inc();
-
             Model.Profile profile = await _profileService.GetById(id);
             
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
