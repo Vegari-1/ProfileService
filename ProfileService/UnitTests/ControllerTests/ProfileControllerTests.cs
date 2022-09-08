@@ -22,6 +22,7 @@ namespace ProfileService.UnitTests.ControllerTests
         private static readonly bool profilePublic = true;
         private static readonly string name = "John";
         private static readonly string surname = "Smith";
+        private static readonly string username = "johnsmith";
         private static readonly string email = "email@example.com";
         private static readonly string phoneNumber = "1234567890";
         private static readonly Gender gender = Gender.FEMALE;
@@ -55,6 +56,7 @@ namespace ProfileService.UnitTests.ControllerTests
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
+                Username = username,
                 Email = email,
                 PhoneNumber = phoneNumber,
                 Gender = gender,
@@ -71,6 +73,7 @@ namespace ProfileService.UnitTests.ControllerTests
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
+                Username = username,
                 Email = email,
                 PhoneNumber = phoneNumber,
                 Gender = gender,
@@ -130,6 +133,7 @@ namespace ProfileService.UnitTests.ControllerTests
             Assert.Equal(profileResponse.Public, actionValue.Public);
             Assert.Equal(profileResponse.Name, actionValue.Name);
             Assert.Equal(profileResponse.Surname, actionValue.Surname);
+            Assert.Equal(profileResponse.Username, actionValue.Username);
             Assert.Equal(profileResponse.Email, actionValue.Email);
             Assert.Equal(profileResponse.PhoneNumber, actionValue.PhoneNumber);
             Assert.Equal(profileResponse.Gender, actionValue.Gender);
