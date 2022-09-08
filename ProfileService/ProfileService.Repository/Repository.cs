@@ -19,6 +19,11 @@ namespace ProfileService.Repository
 
             return entity;
         }
+
+        public async Task<int> SaveChanges()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }
 

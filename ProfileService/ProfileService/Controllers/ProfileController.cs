@@ -4,6 +4,7 @@ using OpenTracing;
 using ProfileService.Dto;
 using ProfileService.Service.Interface;
 using Prometheus;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProfileService.Controllers
 {
@@ -57,6 +58,23 @@ namespace ProfileService.Controllers
             counter.Inc();
 
             Model.Profile profile = await _profileService.Create(_mapper.Map<Model.Profile>(profileRequest));
+
+            ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
+
+            return Ok(profileResponse);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfile(
+            [FromHeader(Name = "profile-id")][Required] Guid id,
+            [FromBody] UpdateProfileRequest updateProfileRequest)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("edit profile");
+            counter.Inc();
+
+            Model.Profile profile = await _profileService.Update(id, _mapper.Map<Model.Profile>(updateProfileRequest));
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
