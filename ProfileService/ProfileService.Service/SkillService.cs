@@ -1,11 +1,34 @@
-﻿using ProfileService.Service.Interface;
+﻿using ProfileService.Model;
+using ProfileService.Repository.Interface;
+using ProfileService.Service.Interface;
+using ProfileService.Service.Interface.Exceptions;
+using System;
+using System.Threading.Tasks;
 
 namespace ProfileService.Service
 {
 	public class SkillService : ISkillService
 	{
-		public SkillService()
+        private readonly ISkillRepository _skillRepository;
+        private readonly IProfileRepository _profileRepository;
+
+        public SkillService(ISkillRepository skillRepository, IProfileRepository profileRepository)
 		{
+            _skillRepository = skillRepository;
+            _profileRepository = profileRepository;
 		}
-	}
+
+        public async Task<Skill> Create(Guid profileId, Skill skill)
+        {
+            Skill existingSkill = await _skillRepository.GetByProfileIdAndName(profileId, skill.Name);
+            if (existingSkill != null)
+                throw new EntityExistsException(typeof(Skill), "name");
+
+            Profile profile = await _profileRepository.GetById(profileId);
+            profile.Skills.Add(skill);
+            await _profileRepository.SaveChanges();
+
+            return skill;
+        }
+    }
 }
