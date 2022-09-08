@@ -7,7 +7,8 @@ namespace ProfileService.Service.Interface
 {
 	public interface IProfileService
 	{
-		Task<Profile> GetById(Guid id);
+        Task<Profile> Create(Profile profile);
+        Task<Profile> GetById(Guid id);
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);
     }

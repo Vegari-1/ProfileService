@@ -18,6 +18,13 @@ namespace ProfileService.Service
             _profileRepository = profileRepository;
 		}
 
+        public async Task<Profile> Create(Profile profile)
+        {
+            if (await _profileRepository.GetByUsername(profile.Username) != null)
+                throw new EntityExistsException(typeof(Profile), "username");
+            return await _profileRepository.Save(profile);
+        }
+
         public async Task<Profile> GetById(Guid id)
         {
             Profile profile = await _profileRepository.GetById(id);

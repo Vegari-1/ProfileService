@@ -59,5 +59,15 @@ namespace ProfileService.Controllers
             return Ok(profileResponse);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProfile([FromBody] ProfileRequest profileRequest)
+        {
+            Model.Profile profile = await _profileService.Create(_mapper.Map<Model.Profile>(profileRequest));
+
+            ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
+
+            return Ok(profileResponse);
+        }
+
     }
 }

@@ -22,6 +22,13 @@ namespace ProfileService.Repository
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Profile> GetByUsername(string username)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Username == username)
+                                .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Profile>> GetByPublic(bool isPublic)
         {
             return await _context.Profiles
