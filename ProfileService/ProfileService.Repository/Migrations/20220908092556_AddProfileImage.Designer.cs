@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProfileService.Repository;
@@ -11,9 +12,10 @@ using ProfileService.Repository;
 namespace ProfileService.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220908092556_AddProfileImage")]
+    partial class AddProfileImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace ProfileService.Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ProfileService.Model.Block", b =>
-                {
-                    b.Property<Guid>("BlockerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BlockedId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("BlockerId", "BlockedId");
-
-                    b.HasIndex("BlockedId");
-
-                    b.ToTable("Blocks");
-                });
 
             modelBuilder.Entity("ProfileService.Model.Connection", b =>
                 {
@@ -151,7 +138,7 @@ namespace ProfileService.Repository.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ImageId")
+                    b.Property<Guid>("ImageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -161,6 +148,9 @@ namespace ProfileService.Repository.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("ProfileId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Public")
                         .HasColumnType("boolean");
@@ -176,6 +166,8 @@ namespace ProfileService.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Profiles");
                 });
@@ -230,25 +222,6 @@ namespace ProfileService.Repository.Migrations
                     b.ToTable("WorkExperiences");
                 });
 
-            modelBuilder.Entity("ProfileService.Model.Block", b =>
-                {
-                    b.HasOne("ProfileService.Model.Profile", "Blocked")
-                        .WithMany("BlockedBy")
-                        .HasForeignKey("BlockedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProfileService.Model.Profile", "Blocker")
-                        .WithMany("Blocked")
-                        .HasForeignKey("BlockerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blocked");
-
-                    b.Navigation("Blocker");
-                });
-
             modelBuilder.Entity("ProfileService.Model.Connection", b =>
                 {
                     b.HasOne("ProfileService.Model.Profile", "Profile1")
@@ -298,7 +271,13 @@ namespace ProfileService.Repository.Migrations
                 {
                     b.HasOne("ProfileService.Model.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId");
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProfileService.Model.Profile", null)
+                        .WithMany("Blocked")
+                        .HasForeignKey("ProfileId");
 
                     b.Navigation("Image");
                 });
@@ -320,8 +299,6 @@ namespace ProfileService.Repository.Migrations
             modelBuilder.Entity("ProfileService.Model.Profile", b =>
                 {
                     b.Navigation("Blocked");
-
-                    b.Navigation("BlockedBy");
 
                     b.Navigation("Education");
 
