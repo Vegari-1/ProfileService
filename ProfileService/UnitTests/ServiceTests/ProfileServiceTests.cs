@@ -4,8 +4,6 @@ using System.Linq;
 using Xunit;
 using Moq;
 using Profile = ProfileService.Model.Profile;
-using ProfileService.Dto;
-using Microsoft.AspNetCore.Mvc;
 using ProfileService.Service.Interface.Exceptions;
 using System.Collections.Generic;
 using ProfileService.Repository.Interface;
@@ -15,13 +13,14 @@ namespace ProfileService.UnitTests.ServiceTests
     public class ProfileServiceTests
     {
         private static readonly Guid id = Guid.NewGuid();
+        private static readonly Guid userId = Guid.NewGuid();
         private static readonly bool profilePublic = true;
         private static readonly string name = "John";
         private static readonly string surname = "Smith";
         private static readonly string username = "johnsmith";
         private static readonly string email = "email@example.com";
-        private static readonly string phoneNumber = "1234567890";
-        private static readonly Gender gender = Gender.FEMALE;
+        private static readonly string phone = "1234567890";
+        private static readonly string gender = "Female";
         private static readonly DateTime dateOfBirth = DateTime.Now;
         private static readonly string biography = "bio";
         private static readonly Skill skill1 = new Skill() { Id = id, Name = "Skill1" };
@@ -41,12 +40,13 @@ namespace ProfileService.UnitTests.ServiceTests
             savedProfile = new Profile()
             {
                 Id = id,
+                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
                 Username = username,
                 Email = email,
-                PhoneNumber = phoneNumber,
+                Phone = phone,
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
@@ -69,12 +69,13 @@ namespace ProfileService.UnitTests.ServiceTests
 
             Assert.IsType<Profile>(response);
             Assert.Equal(savedProfile.Id, response.Id);
+            Assert.Equal(savedProfile.UserId, response.UserId);
             Assert.Equal(savedProfile.Public, response.Public);
             Assert.Equal(savedProfile.Name, response.Name);
             Assert.Equal(savedProfile.Surname, response.Surname);
             Assert.Equal(savedProfile.Username, response.Username);
             Assert.Equal(savedProfile.Email, response.Email);
-            Assert.Equal(savedProfile.PhoneNumber, response.PhoneNumber);
+            Assert.Equal(savedProfile.Phone, response.Phone);
             Assert.Equal(savedProfile.Gender, response.Gender);
             Assert.Equal(savedProfile.DateOfBirth, response.DateOfBirth);
             Assert.Equal(savedProfile.Biography, response.Biography);

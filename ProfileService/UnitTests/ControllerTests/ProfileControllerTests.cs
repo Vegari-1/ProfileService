@@ -19,13 +19,14 @@ namespace ProfileService.UnitTests.ControllerTests
     {
         
         private static readonly Guid id = Guid.NewGuid();
+        private static readonly Guid userId = Guid.NewGuid();
         private static readonly bool profilePublic = true;
         private static readonly string name = "John";
         private static readonly string surname = "Smith";
         private static readonly string username = "johnsmith";
         private static readonly string email = "email@example.com";
-        private static readonly string phoneNumber = "1234567890";
-        private static readonly Gender gender = Gender.FEMALE;
+        private static readonly string phone = "1234567890";
+        private static readonly string gender = "Female";
         private static readonly DateTime dateOfBirth = DateTime.Now;
         private static readonly string biography = "bio";
         private static readonly Skill skill1 = new Skill() { Id = id, Name = "Skill1" };
@@ -53,12 +54,13 @@ namespace ProfileService.UnitTests.ControllerTests
             savedProfile = new Profile()
             {
                 Id = id,
+                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
                 Username = username,
                 Email = email,
-                PhoneNumber = phoneNumber,
+                Phone = phone,
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
@@ -75,7 +77,7 @@ namespace ProfileService.UnitTests.ControllerTests
                 Surname = surname,
                 Username = username,
                 Email = email,
-                PhoneNumber = phoneNumber,
+                Phone = phone,
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
@@ -135,7 +137,7 @@ namespace ProfileService.UnitTests.ControllerTests
             Assert.Equal(profileResponse.Surname, actionValue.Surname);
             Assert.Equal(profileResponse.Username, actionValue.Username);
             Assert.Equal(profileResponse.Email, actionValue.Email);
-            Assert.Equal(profileResponse.PhoneNumber, actionValue.PhoneNumber);
+            Assert.Equal(profileResponse.Phone, actionValue.Phone);
             Assert.Equal(profileResponse.Gender, actionValue.Gender);
             Assert.Equal(profileResponse.DateOfBirth, actionValue.DateOfBirth);
             Assert.Equal(profileResponse.Biography, actionValue.Biography);

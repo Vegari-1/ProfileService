@@ -1,6 +1,4 @@
-﻿using ProfileService.Model;
-
-namespace ProfileService.Dto
+﻿namespace ProfileService.Dto
 {
     public class ProfileResponse
     {
@@ -10,8 +8,8 @@ namespace ProfileService.Dto
         public string Surname { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public Gender Gender { get; set; }
+        public string Phone { get; set; }
+        public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Biography { get; set; }
         public ICollection<SkillResponse> Skills { get; set; }
