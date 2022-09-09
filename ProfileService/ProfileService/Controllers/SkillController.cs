@@ -41,7 +41,23 @@ namespace ProfileService.Controllers
 
             SkillResponse skillResponse = _mapper.Map<SkillResponse>(skill);
 
-            return Ok(skillResponse);
+            return new ObjectResult(skillResponse) { StatusCode = StatusCodes.Status201Created };
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteSkill(
+            [FromHeader(Name = "profile-id")][Required] Guid profileId,
+            Guid id)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("delete skill");
+            counter.Inc();
+
+            await _skillService.Delete(profileId, id);
+
+            return NoContent();
         }
     }
 }

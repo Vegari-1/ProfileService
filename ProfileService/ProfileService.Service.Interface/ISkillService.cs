@@ -7,5 +7,6 @@ namespace ProfileService.Service.Interface
 	public interface ISkillService
 	{
 		Task<Skill> Create(Guid profileId, Skill skill);
+		Task Delete(Guid profileId, Guid id);
 	}
 }

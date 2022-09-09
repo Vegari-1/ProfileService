@@ -20,6 +20,12 @@ namespace ProfileService.Repository
             return entity;
         }
 
+        public async Task<int> Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+            return await _context.SaveChangesAsync();
+        }
+
         public async Task<int> SaveChanges()
         {
             return await _context.SaveChangesAsync();
