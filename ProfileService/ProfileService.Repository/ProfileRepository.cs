@@ -28,6 +28,14 @@ namespace ProfileService.Repository
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Profile> GetByIdEducation(Guid id)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Id == id)
+                                .Include(x => x.Education)
+                                .FirstOrDefaultAsync();
+        }
+
         public async Task<Profile> GetByUsername(string username)
         {
             return await _context.Profiles

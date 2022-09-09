@@ -24,7 +24,7 @@ namespace ProfileService.Service
             if (existingSkill != null)
                 throw new EntityExistsException(typeof(Skill), "name");
 
-            Profile profile = await _profileRepository.GetById(profileId);
+            Profile profile = await _profileRepository.GetByIdSkills(profileId);
             profile.Skills.Add(skill);
             await _profileRepository.SaveChanges();
 
