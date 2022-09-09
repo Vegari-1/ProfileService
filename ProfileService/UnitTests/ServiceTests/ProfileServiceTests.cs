@@ -62,7 +62,7 @@ namespace ProfileService.UnitTests.ServiceTests
             SetUp();
 
             mockRepository
-                .Setup(x => x.GetById(id))
+                .Setup(x => x.GetByIdImage(id))
                 .ReturnsAsync(savedProfile);
 
             var response = await profileService.GetById(id);
