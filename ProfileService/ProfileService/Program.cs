@@ -36,6 +36,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 //repositories
 builder.Services.AddScoped<IConnectionRequestRepository, ConnectionRequestRepository>();
+builder.Services.AddScoped<IConnectionRepository, ConnectionRepository>();
 builder.Services.AddScoped<IEducationRepository, EducationRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>(
 
 //services
 builder.Services.AddScoped<IConnectionRequestService, ConnectionRequestService>();
+builder.Services.AddScoped<IConnectionService, ConnectionService>();
 builder.Services.AddScoped<IEducationService, EducationService>();
 builder.Services.AddScoped<IProfileService, ProfileService.Service.ProfileService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
