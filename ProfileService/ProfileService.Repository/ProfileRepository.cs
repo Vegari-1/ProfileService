@@ -88,6 +88,13 @@ namespace ProfileService.Repository
                                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Profile>> GetByIdList(IEnumerable<Guid> idList)
+        {
+            return await _context.Profiles
+                                .Where(x => idList.Contains(x.Id))
+                                .Include(x => x.Image)
+                                .ToListAsync();
+        }
     }
 }
 

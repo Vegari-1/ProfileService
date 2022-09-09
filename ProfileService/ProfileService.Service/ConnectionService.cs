@@ -28,15 +28,11 @@ namespace ProfileService.Service
 
             Profile user = await _profileRepository.GetById(profileId);
             if (user == null)
-            {
                 throw new EntityNotFoundException(typeof(Profile), "id");
-            }
 
             Profile linkProfile = await _profileRepository.GetById(linkProfileId);
             if (linkProfile == null)
-            {
                 throw new EntityNotFoundException(typeof(Profile), "id");
-            }
 
             Connection existingConn = await
                     _connectionRepository.GetByProfileIdAndLinkId(profileId, linkProfileId);
@@ -44,12 +40,9 @@ namespace ProfileService.Service
                 throw new EntityExistsException(typeof(Connection), "connection profile id");
 
             if (linkProfile.Public)
-            {
                 return await CreatePublic(profileId, linkProfileId);
-            } else
-            {
+            else
                 return await CreatePrivate(profileId, linkProfileId);
-            }
         }
 
         private async Task<Connection> CreatePublic(Guid profileId, Guid linkProfileId)

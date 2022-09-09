@@ -14,15 +14,13 @@ namespace ProfileService.Controllers
     {
 
         private readonly IConnectionService _connectionService;
-        private readonly IMapper _mapper;
         private readonly ITracer _tracer;
 
         Counter counter = Metrics.CreateCounter("profile_service_counter", "connection counter");
 
-        public ConnectionController(IConnectionService connectionService, IMapper mapper, ITracer tracer)
+        public ConnectionController(IConnectionService connectionService, ITracer tracer)
         {
             _connectionService = connectionService;
-            _mapper = mapper;
             _tracer = tracer;
         }
 
