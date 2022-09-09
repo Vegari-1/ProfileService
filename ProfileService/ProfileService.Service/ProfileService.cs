@@ -14,7 +14,7 @@ namespace ProfileService.Service
 
         private readonly IProfileRepository _profileRepository;
 
-		public ProfileService(IProfileRepository profileRepository)
+        public ProfileService(IProfileRepository profileRepository)
 		{
             _profileRepository = profileRepository;
 		}
@@ -28,7 +28,7 @@ namespace ProfileService.Service
 
         public async Task<Profile> GetById(Guid id)
         {
-            Profile profile = await _profileRepository.GetById(id);
+            Profile profile = await _profileRepository.GetByIdImage(id);
             if (profile == null)
             {
                 throw new EntityNotFoundException(typeof(Profile), "id");
@@ -80,7 +80,7 @@ namespace ProfileService.Service
             if (!id.Equals(profile.Id))
                 throw new ForbiddenException();
 
-            Profile dbProfile = await _profileRepository.GetById(id);
+            Profile dbProfile = await _profileRepository.GetByIdImage(id);
 
             dbProfile.Public = profile.Public;
             dbProfile.Name = profile.Name;
@@ -129,5 +129,6 @@ namespace ProfileService.Service
 
             return block;
         }
+
     }
 }

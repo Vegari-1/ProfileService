@@ -16,6 +16,13 @@ namespace ProfileService.Repository
         {
             return await _context.Profiles
                                 .Where(x => x.Id == id)
+                                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Profile> GetByIdImage(Guid id)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Id == id)
                                 .Include(x => x.Image)
                                 .FirstOrDefaultAsync();
         }
