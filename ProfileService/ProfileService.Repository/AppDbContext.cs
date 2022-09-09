@@ -18,7 +18,7 @@ namespace ProfileService.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Block>()
-                .HasKey(e => new { e.BlockerId, e.BlockedId });
+                .HasKey(e => new { e.Id });
 
             modelBuilder.Entity<Block>()
                 .HasOne(e => e.Blocker)
@@ -29,6 +29,14 @@ namespace ProfileService.Repository
                 .HasOne(e => e.Blocked)
                 .WithMany(e => e.BlockedBy)
                 .HasForeignKey(e => e.BlockedId);
+
+            modelBuilder.Entity<Connection>()
+               .Property(e => e.Timestamp)
+               .HasDefaultValueSql("current_timestamp at time zone 'utc'");
+
+            modelBuilder.Entity<ConnectionRequest>()
+               .Property(e => e.Timestamp)
+               .HasDefaultValueSql("current_timestamp at time zone 'utc'");
         }
     }
 }

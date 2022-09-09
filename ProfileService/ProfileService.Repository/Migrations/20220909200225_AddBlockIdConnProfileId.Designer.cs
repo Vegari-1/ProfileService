@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProfileService.Repository;
@@ -11,9 +12,10 @@ using ProfileService.Repository;
 namespace ProfileService.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220909200225_AddBlockIdConnProfileId")]
+    partial class AddBlockIdConnProfileId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,11 +57,6 @@ namespace ProfileService.Repository.Migrations
                     b.Property<Guid>("Profile2")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("getutcdate()");
-
                     b.HasKey("Id");
 
                     b.ToTable("Connections");
@@ -71,18 +68,20 @@ namespace ProfileService.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("Profile1")
+                    b.Property<Guid>("RequestedProfileId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("Profile2")
+                    b.Property<Guid>("RequestingProfileId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RequestedProfileId");
+
+                    b.HasIndex("RequestingProfileId");
 
                     b.ToTable("ConnectionRequests");
                 });
@@ -256,6 +255,25 @@ namespace ProfileService.Repository.Migrations
                     b.Navigation("Blocked");
 
                     b.Navigation("Blocker");
+                });
+
+            modelBuilder.Entity("ProfileService.Model.ConnectionRequest", b =>
+                {
+                    b.HasOne("ProfileService.Model.Profile", "RequestedProfile")
+                        .WithMany()
+                        .HasForeignKey("RequestedProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProfileService.Model.Profile", "RequestingProfile")
+                        .WithMany()
+                        .HasForeignKey("RequestingProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RequestedProfile");
+
+                    b.Navigation("RequestingProfile");
                 });
 
             modelBuilder.Entity("ProfileService.Model.Education", b =>
