@@ -42,5 +42,20 @@ namespace ProfileService.Controllers
             return new ObjectResult(conn) { StatusCode = StatusCodes.Status201Created };
         }
 
+        [HttpDelete]
+        [Route("{linkProfileId}")]
+        public async Task<IActionResult> DeleteConnection(
+            [FromHeader(Name = "profile-id")][Required] Guid profileId,
+            Guid linkProfileId)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("delete connection");
+            counter.Inc();
+
+            await _connectionService.Delete(profileId, linkProfileId);
+
+            return NoContent();
+        }
     }
 }
