@@ -145,5 +145,23 @@ namespace ProfileService.Controllers
 
             return Ok(workExpResponses);
         }
+
+        [HttpPut]
+        [Route("block/{blockProfileId}")]
+        public async Task<IActionResult> BlockProfile(
+            [FromHeader(Name = "profile-id")][Required] Guid id, 
+            Guid blockProfileId)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("block profile by id");
+            counter.Inc();
+
+            Block block = await _profileService.Block(id, blockProfileId);
+
+            BlockResponse blockResponse = _mapper.Map<BlockResponse>(block);
+
+            return Ok(blockResponse);
+        }
     }
 }

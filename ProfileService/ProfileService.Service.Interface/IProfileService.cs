@@ -15,5 +15,6 @@ namespace ProfileService.Service.Interface
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);
         Task<Profile> Update(Guid id, Profile profile);
+        Task<Block> Block(Guid id, Guid blockProfileId);
     }
 }

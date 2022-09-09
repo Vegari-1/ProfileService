@@ -11,6 +11,7 @@ namespace ProfileService.Repository.Interface
         Task<Profile> GetByIdSkills(Guid id);
         Task<Profile> GetByIdEducation(Guid id);
         Task<Profile> GetByIdWorkExperiences(Guid id);
+        Task<Profile> GetByIdBlocks(Guid id);
         Task<Profile> GetByUsername(string username);
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);

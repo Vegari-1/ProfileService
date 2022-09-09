@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using ProfileService.Service.Interface.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProfileService.Service
 {
@@ -94,6 +95,39 @@ namespace ProfileService.Service
             await _profileRepository.SaveChanges();
 
             return dbProfile;
+        }
+
+        public async Task<Block> Block(Guid id, Guid blockProfileId)
+        {
+            Profile blocker = await _profileRepository.GetByIdBlocks(id);
+            if (blocker == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+
+            Profile blocked = await _profileRepository.GetByIdBlocks(blockProfileId);
+            if (blocked == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+
+            if (blocker.Blocked.Where(b => b.BlockedId == blockProfileId).FirstOrDefault() != null)
+                throw new BadRequestException(typeof(Block), "block profile id");
+            if (blocker.BlockedBy.Where(b => b.BlockerId == blockProfileId).FirstOrDefault() != null)
+                throw new BadRequestException(typeof(Block), "block profile id");
+
+            Block block = new Block
+            {
+                BlockerId = blocker.Id,
+                Blocker = blocker,
+                BlockedId = blocked.Id,
+                Blocked = blocked
+            };
+
+            blocker.Blocked.Add(block);
+            await _profileRepository.SaveChanges();
+
+            return block;
         }
     }
 }

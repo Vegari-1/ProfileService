@@ -44,6 +44,15 @@ namespace ProfileService.Repository
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Profile> GetByIdBlocks(Guid id)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Id == id)
+                                .Include(x => x.Blocked)
+                                .Include(x => x.BlockedBy)
+                                .FirstOrDefaultAsync();
+        }
+
         public async Task<Profile> GetByUsername(string username)
         {
             return await _context.Profiles
