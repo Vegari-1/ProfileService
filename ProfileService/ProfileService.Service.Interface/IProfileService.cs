@@ -11,6 +11,7 @@ namespace ProfileService.Service.Interface
         Task<Profile> GetById(Guid id);
         Task<IEnumerable<Skill>> GetByIdSkills(Guid id);
         Task<IEnumerable<Education>> GetByIdEducation(Guid id);
+        Task<IEnumerable<WorkExperience>> GetByIdWorkExperience(Guid id);
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);
         Task<Profile> Update(Guid id, Profile profile);
