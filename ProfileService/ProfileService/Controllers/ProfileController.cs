@@ -104,5 +104,15 @@ namespace ProfileService.Controllers
             return Ok(skillResponses);
         }
 
+        [HttpGet]
+        [Route("{id}/education")]
+        public async Task<IActionResult> GetProfileEducation(Guid id)
+        {
+            IEnumerable<Education> edu = await _profileService.GetByIdEducation(id);
+
+            IEnumerable<EducationResponse> eduResponses = _mapper.Map<IEnumerable<EducationResponse>>(edu);
+
+            return Ok(eduResponses);
+        }
     }
 }

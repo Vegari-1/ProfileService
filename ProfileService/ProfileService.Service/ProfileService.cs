@@ -37,7 +37,22 @@ namespace ProfileService.Service
 
         public async Task<IEnumerable<Skill>> GetByIdSkills(Guid id)
         {
-            return (await _profileRepository.GetByIdSkills(id)).Skills;
+            Profile profile = await _profileRepository.GetByIdSkills(id);
+            if (profile == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+            return profile.Skills;
+        }
+
+        public async Task<IEnumerable<Education>> GetByIdEducation(Guid id)
+        {
+            Profile profile = await _profileRepository.GetByIdEducation(id);
+            if (profile == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+            return profile.Education;
         }
 
         public async Task<IEnumerable<Profile>> GetByPublic(bool isPublic)
