@@ -7,6 +7,8 @@ namespace ProfileService.Profiles
     {
         public EducationProfile()
         {
+            CreateMap<EducationRequest, Education>()
+                .ForMember(dest => dest.StartDate, src => src.MapFrom(s => s.StartDate.Date));
             CreateMap<Education, EducationResponse>();
         }
     }
