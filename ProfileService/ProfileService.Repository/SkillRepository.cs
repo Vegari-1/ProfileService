@@ -11,6 +11,13 @@ namespace ProfileService.Repository
     {
         public SkillRepository(AppDbContext context) : base(context) { }
 
+        public async Task<Skill> GetById(Guid id)
+        {
+            return await _context.Skills
+                                   .Where(x => x.Id == id)
+                                   .FirstOrDefaultAsync();
+        }
+
         public async Task<Skill> GetByProfileIdAndName(Guid profileId, string name)
         {
             return await _context.Skills

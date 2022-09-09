@@ -30,5 +30,14 @@ namespace ProfileService.Service
 
             return skill;
         }
+
+        public async Task Delete(Guid profileId, Guid id)
+        {
+            Skill skill = await _skillRepository.GetById(id);
+            if (skill.ProfileId != profileId)
+                throw new ForbiddenException();
+
+            await _skillRepository.Delete(skill);
+        }
     }
 }
