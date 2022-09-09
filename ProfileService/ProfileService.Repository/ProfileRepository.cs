@@ -16,9 +16,7 @@ namespace ProfileService.Repository
         {
             return await _context.Profiles
                                 .Where(x => x.Id == id)
-                                .Include(x => x.Education)
-                                .Include(x => x.Skills)
-                                .Include(x => x.WorkExperiences)
+                                .Include(x => x.Image)
                                 .FirstOrDefaultAsync();
         }
 

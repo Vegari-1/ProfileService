@@ -12,8 +12,6 @@
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Biography { get; set; }
-        public ICollection<SkillResponse> Skills { get; set; }
-        public ICollection<EducationResponse> Education { get; set; }
-        public ICollection<WorkExperienceResponse> WorkExperiences { get; set; }
+        public string Picture { get; set; }
     }
 }
