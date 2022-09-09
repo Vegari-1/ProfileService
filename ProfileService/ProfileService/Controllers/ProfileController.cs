@@ -61,7 +61,7 @@ namespace ProfileService.Controllers
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
-            return Ok(profileResponse);
+            return new ObjectResult(profileResponse) { StatusCode = StatusCodes.Status201Created };
         }
 
         [HttpPut]
@@ -82,7 +82,7 @@ namespace ProfileService.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetProfile(Guid id)
         {
             Model.Profile profile = await _profileService.GetById(id);
