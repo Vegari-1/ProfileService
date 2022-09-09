@@ -76,5 +76,15 @@ namespace ProfileService.Service
             };
             return await _connectionRequestRepository.Save(connReq);
         }
+
+        public async Task Delete(Guid profileId, Guid linkProfileId)
+        {
+            Connection conn = await
+                    _connectionRepository.GetByProfileIdAndLinkId(profileId, linkProfileId);
+            if (conn == null)
+                throw new EntityNotFoundException(typeof(Connection), "connection profile id");
+
+            await _connectionRepository.Delete(conn);
+        }
     }
 }
