@@ -22,9 +22,9 @@ namespace ProfileService.Model
         public virtual ICollection<Block> Blocked { get; set; }
         public virtual ICollection<Block> BlockedBy { get; set; }
 
-        public ICollection<Skill> Skills { get; set; }
-        public ICollection<Education> Education { get; set; }
-        public ICollection<WorkExperience> WorkExperiences { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
+        public virtual ICollection<Education> Education { get; set; }
+        public virtual ICollection<WorkExperience> WorkExperiences { get; set; }
     }
 }
 
