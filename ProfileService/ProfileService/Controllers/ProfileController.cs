@@ -86,6 +86,11 @@ namespace ProfileService.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetProfile(Guid id)
         {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("get profile by id");
+            counter.Inc();
+
             Model.Profile profile = await _profileService.GetById(id);
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
@@ -97,6 +102,11 @@ namespace ProfileService.Controllers
         [Route("{id}/skill")]
         public async Task<IActionResult> GetProfileSkills(Guid id)
         {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("get profile skills by id");
+            counter.Inc();
+
             IEnumerable<Skill> skills = await _profileService.GetByIdSkills(id);
 
             IEnumerable<SkillResponse> skillResponses = _mapper.Map<IEnumerable<SkillResponse>>(skills);
@@ -108,6 +118,11 @@ namespace ProfileService.Controllers
         [Route("{id}/education")]
         public async Task<IActionResult> GetProfileEducation(Guid id)
         {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("get profile education by id");
+            counter.Inc();
+
             IEnumerable<Education> edu = await _profileService.GetByIdEducation(id);
 
             IEnumerable<EducationResponse> eduResponses = _mapper.Map<IEnumerable<EducationResponse>>(edu);
