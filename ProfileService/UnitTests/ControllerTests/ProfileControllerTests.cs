@@ -1,6 +1,4 @@
-﻿using ProfileService.Model;
-using System;
-using System.Linq;
+﻿using System;
 using Xunit;
 using Moq;
 using AutoMapper;
@@ -10,7 +8,6 @@ using ProfileService.Controllers;
 using ProfileService.Dto;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.Service.Interface.Exceptions;
-using System.Collections.Generic;
 using OpenTracing;
 
 namespace ProfileService.UnitTests.ControllerTests
@@ -29,16 +26,6 @@ namespace ProfileService.UnitTests.ControllerTests
         private static readonly string gender = "Female";
         private static readonly DateTime dateOfBirth = DateTime.Now;
         private static readonly string biography = "bio";
-        private static readonly Skill skill1 = new Skill() { Id = id, Name = "Skill1" };
-        private static readonly Skill skill2 = new Skill() { Id = id, Name = "Skill2" };
-        private static readonly DateTime date = DateTime.Now;
-        private static readonly Education education = new Education() { Id = id, School = "School", Degree = "Degree", Field = "Field", StartDate = date, EndDate = date };
-        private static readonly WorkExperience workExperience = new WorkExperience() { Id = id, Position = "Position", Company = "Company", StartDate = date, EndDate = date  };
-
-        private static readonly SkillResponse skillResponse1 = new SkillResponse() { Id = id, Name = "Skill1" };
-        private static readonly SkillResponse skillResponse2 = new SkillResponse() { Id = id, Name = "Skill2" };
-        private static readonly EducationResponse educationResponse = new EducationResponse() { Id = id, School = "School", Degree = "Degree", Field = "Field", StartDate = date, EndDate = date };
-        private static readonly WorkExperienceResponse workExperienceResponse = new WorkExperienceResponse() { Id = id, Position = "Position", Company = "Company", StartDate = date, EndDate = date };
 
         private static Profile savedProfile;
         private static ProfileResponse profileResponse;
@@ -64,9 +51,6 @@ namespace ProfileService.UnitTests.ControllerTests
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
-                Skills = new List<Skill>{ skill1, skill2 },
-                Education = new List<Education>{ education },
-                WorkExperiences = new List<WorkExperience>{ workExperience }
             };
 
             profileResponse = new ProfileResponse()
@@ -81,9 +65,6 @@ namespace ProfileService.UnitTests.ControllerTests
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
-                Skills = new List<SkillResponse>{ skillResponse1, skillResponse2 },
-                Education = new List<EducationResponse>{ educationResponse },
-                WorkExperiences = new List<WorkExperienceResponse>{ workExperienceResponse }
             };
         }
 
@@ -102,30 +83,6 @@ namespace ProfileService.UnitTests.ControllerTests
                {
                    return profileResponse;
                });
-            mockMapper
-               .Setup(x => x.Map<SkillResponse>(skill1))
-               .Returns((Skill source) =>
-               {
-                   return skillResponse1;
-               });
-            mockMapper
-               .Setup(x => x.Map<SkillResponse>(skill2))
-               .Returns((Skill source) =>
-               {
-                   return skillResponse2;
-               });
-            mockMapper
-               .Setup(x => x.Map<EducationResponse>(education))
-               .Returns((Education source) =>
-               {
-                   return educationResponse;
-               });
-            mockMapper
-               .Setup(x => x.Map<WorkExperienceResponse>(workExperience))
-               .Returns((WorkExperience source) =>
-               {
-                   return workExperienceResponse;
-               });
 
             var response = await profileController.GetProfile(id);
 
@@ -141,31 +98,6 @@ namespace ProfileService.UnitTests.ControllerTests
             Assert.Equal(profileResponse.Gender, actionValue.Gender);
             Assert.Equal(profileResponse.DateOfBirth, actionValue.DateOfBirth);
             Assert.Equal(profileResponse.Biography, actionValue.Biography);
-
-            Assert.True(actionValue.Skills.Count == 2);
-            var actionValueSkill1 = Assert.IsType<SkillResponse>(actionValue.Skills.First());
-            Assert.Equal(skillResponse1.Id, actionValueSkill1.Id);
-            Assert.Equal(skillResponse1.Name, actionValueSkill1.Name);
-            var actionValueSkill2 = Assert.IsType<SkillResponse>(actionValue.Skills.Last());
-            Assert.Equal(skillResponse2.Id, actionValueSkill2.Id);
-            Assert.Equal(skillResponse2.Name, actionValueSkill2.Name);
-
-            Assert.True(actionValue.Education.Count == 1);
-            var actionValueEducation = Assert.IsType<EducationResponse>(actionValue.Education.First());
-            Assert.Equal(educationResponse.Id, actionValueEducation.Id);
-            Assert.Equal(educationResponse.School, actionValueEducation.School);
-            Assert.Equal(educationResponse.Degree, actionValueEducation.Degree);
-            Assert.Equal(educationResponse.Field, actionValueEducation.Field);
-            Assert.Equal(educationResponse.StartDate, actionValueEducation.StartDate);
-            Assert.Equal(educationResponse.EndDate, actionValueEducation.EndDate);
-
-            Assert.True(actionValue.WorkExperiences.Count == 1);
-            var actionValueWorkExperience = Assert.IsType<WorkExperienceResponse>(actionValue.WorkExperiences.First());
-            Assert.Equal(workExperienceResponse.Id, actionValueWorkExperience.Id);
-            Assert.Equal(workExperienceResponse.Position, actionValueWorkExperience.Position);
-            Assert.Equal(workExperienceResponse.Company, actionValueWorkExperience.Company);
-            Assert.Equal(workExperienceResponse.StartDate, actionValueWorkExperience.StartDate);
-            Assert.Equal(workExperienceResponse.EndDate, actionValueWorkExperience.EndDate);
         }
 
         [Fact]
