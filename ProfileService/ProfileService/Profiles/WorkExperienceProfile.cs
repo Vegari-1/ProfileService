@@ -7,6 +7,8 @@ namespace ProfileService.Profiles
     {
         public WorkExperienceProfile()
         {
+            CreateMap<WorkExperienceRequest, WorkExperience>()
+                .ForMember(dest => dest.StartDate, src => src.MapFrom(s => s.StartDate.Date));
             CreateMap<WorkExperience, WorkExperienceResponse>();
         }
     }

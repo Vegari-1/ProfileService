@@ -18,7 +18,7 @@ namespace ProfileService.Controllers
         private readonly IMapper _mapper;
         private readonly ITracer _tracer;
 
-        Counter counter = Metrics.CreateCounter("skill_service_counter", "skill counter");
+        Counter counter = Metrics.CreateCounter("profile_service_counter", "skill counter");
 
         public SkillController(ISkillService skillService, IMapper mapper, ITracer tracer)
         {

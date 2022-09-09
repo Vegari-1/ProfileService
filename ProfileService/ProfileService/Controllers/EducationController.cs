@@ -17,7 +17,7 @@ namespace ProfileService.Controllers
         private readonly IMapper _mapper;
         private readonly ITracer _tracer;
 
-        Counter counter = Metrics.CreateCounter("education_service_counter", "education counter");
+        Counter counter = Metrics.CreateCounter("profile_service_counter", "education counter");
 
         public EducationController(IEducationService educationService, IMapper mapper, ITracer tracer)
         {
