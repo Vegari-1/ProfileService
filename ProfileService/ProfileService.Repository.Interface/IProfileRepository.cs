@@ -8,6 +8,7 @@ namespace ProfileService.Repository.Interface
 	public interface IProfileRepository : IRepository<Profile>
 	{
 		Task<Profile> GetById(Guid id);
+        Task<Profile> GetByIdImage(Guid id);
         Task<Profile> GetByIdSkills(Guid id);
         Task<Profile> GetByIdEducation(Guid id);
         Task<Profile> GetByIdWorkExperiences(Guid id);
