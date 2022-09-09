@@ -54,6 +54,15 @@ namespace ProfileService.Service
             }
             return profile.Education;
         }
+        public async Task<IEnumerable<WorkExperience>> GetByIdWorkExperience(Guid id)
+        {
+            Profile profile = await _profileRepository.GetByIdEducation(id);
+            if (profile == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+            return profile.WorkExperiences;
+        }
 
         public async Task<IEnumerable<Profile>> GetByPublic(bool isPublic)
         {

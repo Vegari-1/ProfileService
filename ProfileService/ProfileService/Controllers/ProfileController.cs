@@ -129,5 +129,21 @@ namespace ProfileService.Controllers
 
             return Ok(eduResponses);
         }
+
+        [HttpGet]
+        [Route("{id}/work-experience")]
+        public async Task<IActionResult> GetProfileWorkExperience(Guid id)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("get profile work experience by id");
+            counter.Inc();
+
+            IEnumerable<WorkExperience> workExp = await _profileService.GetByIdWorkExperience(id);
+
+            IEnumerable<WorkExperienceResponse> workExpResponses = _mapper.Map<IEnumerable<WorkExperienceResponse>>(workExp);
+
+            return Ok(workExpResponses);
+        }
     }
 }
