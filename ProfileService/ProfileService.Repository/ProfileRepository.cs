@@ -22,6 +22,14 @@ namespace ProfileService.Repository
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Profile> GetByIdSkills(Guid id)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Id == id)
+                                .Include(x => x.Skills)
+                                .FirstOrDefaultAsync();
+        }
+
         public async Task<Profile> GetByUsername(string username)
         {
             return await _context.Profiles

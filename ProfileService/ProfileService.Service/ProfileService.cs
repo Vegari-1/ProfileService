@@ -35,6 +35,11 @@ namespace ProfileService.Service
             return profile;
         }
 
+        public async Task<IEnumerable<Skill>> GetByIdSkills(Guid id)
+        {
+            return (await _profileRepository.GetByIdSkills(id)).Skills;
+        }
+
         public async Task<IEnumerable<Profile>> GetByPublic(bool isPublic)
         {
             return await _profileRepository.GetByPublic(isPublic);
