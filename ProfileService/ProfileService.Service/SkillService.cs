@@ -34,6 +34,8 @@ namespace ProfileService.Service
         public async Task Delete(Guid profileId, Guid id)
         {
             Skill skill = await _skillRepository.GetById(id);
+            if (skill == null)
+                throw new EntityNotFoundException(typeof(Skill), "id");
             if (skill.ProfileId != profileId)
                 throw new ForbiddenException();
 

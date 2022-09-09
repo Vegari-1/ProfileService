@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OpenTracing;
 using ProfileService.Dto;
+using ProfileService.Model;
 using ProfileService.Service.Interface;
 using Prometheus;
 using System.ComponentModel.DataAnnotations;
@@ -90,6 +91,17 @@ namespace ProfileService.Controllers
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
             return Ok(profileResponse);
+        }
+
+        [HttpGet]
+        [Route("{id}/skill")]
+        public async Task<IActionResult> GetProfileSkills(Guid id)
+        {
+            IEnumerable<Skill> skills = await _profileService.GetByIdSkills(id);
+
+            IEnumerable<SkillResponse> skillResponses = _mapper.Map<IEnumerable<SkillResponse>>(skills);
+
+            return Ok(skillResponses);
         }
 
     }
