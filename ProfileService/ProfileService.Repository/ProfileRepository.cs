@@ -36,6 +36,14 @@ namespace ProfileService.Repository
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Profile> GetByIdWorkExperiences(Guid id)
+        {
+            return await _context.Profiles
+                                .Where(x => x.Id == id)
+                                .Include(x => x.WorkExperiences)
+                                .FirstOrDefaultAsync();
+        }
+
         public async Task<Profile> GetByUsername(string username)
         {
             return await _context.Profiles
@@ -63,6 +71,7 @@ namespace ProfileService.Repository
                                 .Include(x => x.Image)
                                 .ToListAsync();
         }
+
     }
 }
 
