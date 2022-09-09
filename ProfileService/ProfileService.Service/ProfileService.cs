@@ -56,7 +56,7 @@ namespace ProfileService.Service
         }
         public async Task<IEnumerable<WorkExperience>> GetByIdWorkExperience(Guid id)
         {
-            Profile profile = await _profileRepository.GetByIdEducation(id);
+            Profile profile = await _profileRepository.GetByIdWorkExperiences(id);
             if (profile == null)
             {
                 throw new EntityNotFoundException(typeof(Profile), "id");
