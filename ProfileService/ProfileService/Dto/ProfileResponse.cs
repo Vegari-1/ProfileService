@@ -13,5 +13,7 @@
         public DateTime DateOfBirth { get; set; }
         public string Biography { get; set; }
         public string Picture { get; set; }
+        public bool? Following { get; set; }
+        public bool? PendingFollow { get; set; }
     }
 }

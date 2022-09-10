@@ -97,8 +97,6 @@ if (builder.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProfileService v1"));
 }
 
-//app.UseHttpsRedirection();
-
 app.UseCors(allowSpecificOrigins);
 
 app.UseAuthorization();

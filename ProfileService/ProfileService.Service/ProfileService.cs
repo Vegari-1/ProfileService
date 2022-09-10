@@ -10,14 +10,18 @@ using System.Linq;
 namespace ProfileService.Service
 {
 	public class ProfileService : IProfileService
-	{
-
+    {
+        private readonly IConnectionRequestRepository _connectionRequestRepository;
+        private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
 
-        public ProfileService(IProfileRepository profileRepository)
-		{
+        public ProfileService(IConnectionRequestRepository connectionRequestRepository,
+            IConnectionRepository connectionRepository, IProfileRepository profileRepository)
+        {
+            _connectionRequestRepository = connectionRequestRepository;
+            _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
-		}
+        }
 
         public async Task<Profile> Create(Profile profile)
         {
@@ -34,6 +38,25 @@ namespace ProfileService.Service
                 throw new EntityNotFoundException(typeof(Profile), "id");
             }
             return profile;
+        }
+
+        public async Task<Tuple<Profile, int>> GetByIdForProfile(Guid id, Guid profileId)
+        {
+            Profile profile = await _profileRepository.GetByIdImage(id);
+            if (profile == null)
+            {
+                throw new EntityNotFoundException(typeof(Profile), "id");
+            }
+
+            int status = 0;
+            ConnectionRequest connReq = await _connectionRequestRepository.GetByProfileIdAndLinkId(profileId, id);
+            if (connReq != null)
+                status = 1;
+            Connection conn = await _connectionRepository.GetByProfileIdAndLinkId(profileId, id);
+            if (conn != null)
+                status = 2;
+
+            return new Tuple<Profile, int>(profile, status);
         }
 
         public async Task<IEnumerable<Skill>> GetByIdSkills(Guid id)
