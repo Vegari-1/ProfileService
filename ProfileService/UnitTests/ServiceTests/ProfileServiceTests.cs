@@ -31,9 +31,11 @@ namespace ProfileService.UnitTests.ServiceTests
 
         private static Profile savedProfile;
 
-        private static Mock<IProfileRepository> mockRepository = new Mock<IProfileRepository>();
+        private static Mock<IProfileRepository> mockProfileRepo = new Mock<IProfileRepository>();
+        private static Mock<IConnectionRepository> mockConnRepo = new Mock<IConnectionRepository>();
+        private static Mock<IConnectionRequestRepository> mockConnReqRepo = new Mock<IConnectionRequestRepository>();
 
-        private static Service.ProfileService profileService = new Service.ProfileService(mockRepository.Object);
+        private static Service.ProfileService profileService = new Service.ProfileService(mockConnReqRepo.Object, mockConnRepo.Object, mockProfileRepo.Object);
 
         private static void SetUp()
         {
@@ -61,7 +63,7 @@ namespace ProfileService.UnitTests.ServiceTests
         {
             SetUp();
 
-            mockRepository
+            mockProfileRepo
                 .Setup(x => x.GetByIdImage(id))
                 .ReturnsAsync(savedProfile);
 
@@ -114,7 +116,7 @@ namespace ProfileService.UnitTests.ServiceTests
             var exception = new EntityNotFoundException(typeof(Profile), "id");
             Guid invalidId = Guid.NewGuid();
 
-            mockRepository
+            mockProfileRepo
                .Setup(repository => repository.GetById(invalidId))
                .ReturnsAsync(null as Profile);
 
