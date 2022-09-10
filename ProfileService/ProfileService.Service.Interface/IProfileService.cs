@@ -9,6 +9,7 @@ namespace ProfileService.Service.Interface
 	{
         Task<Profile> Create(Profile profile);
         Task<Profile> GetById(Guid id);
+        Task<Tuple<Profile, int>> GetByIdForProfile(Guid id, Guid profileId);
         Task<IEnumerable<Skill>> GetByIdSkills(Guid id);
         Task<IEnumerable<Education>> GetByIdEducation(Guid id);
         Task<IEnumerable<WorkExperience>> GetByIdWorkExperience(Guid id);
