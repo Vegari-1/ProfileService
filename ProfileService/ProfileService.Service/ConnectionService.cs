@@ -1,4 +1,5 @@
-﻿using ProfileService.Model;
+﻿using BusService;
+using ProfileService.Model;
 using ProfileService.Repository.Interface;
 using ProfileService.Service.Interface;
 using ProfileService.Service.Interface.Exceptions;
@@ -12,13 +13,16 @@ namespace ProfileService.Service
         private readonly IConnectionRequestRepository _connectionRequestRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
+        private readonly IConnectionSyncService _connectionSyncService;
 
         public ConnectionService(IConnectionRequestRepository connectionRequestRepository, 
-            IConnectionRepository connectionRepository, IProfileRepository profileRepository)
+            IConnectionRepository connectionRepository, IProfileRepository profileRepository,
+            IConnectionSyncService connectionSyncService)
         {
             _connectionRequestRepository = connectionRequestRepository;
             _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
+            _connectionSyncService = connectionSyncService;
         }
 
         public async Task<IConnection> Create(Guid profileId, Guid linkProfileId)
@@ -52,7 +56,12 @@ namespace ProfileService.Service
                 Profile1 = profileId,
                 Profile2 = linkProfileId
             };
-            return await _connectionRepository.Save(conn);
+
+            await _connectionRepository.Save(conn);
+
+            _connectionSyncService.PublishAsync(conn, Events.Created);
+
+            return conn;
         }
 
         private async Task<ConnectionRequest> CreatePrivate(Guid profileId, Guid linkProfileId)
@@ -76,6 +85,8 @@ namespace ProfileService.Service
                     _connectionRepository.GetByProfileIdAndLinkId(profileId, linkProfileId);
             if (conn == null)
                 throw new EntityNotFoundException(typeof(Connection), "connection profile id");
+
+            _connectionSyncService.PublishAsync(conn, Events.Deleted);
 
             await _connectionRepository.Delete(conn);
         }

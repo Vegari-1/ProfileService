@@ -16,22 +16,29 @@ namespace ProfileService.Service
         private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IProfileSyncService _profileSyncService;
+        private readonly IBlockSyncService _blockSyncService;
 
         public ProfileService(IConnectionRequestRepository connectionRequestRepository,
             IConnectionRepository connectionRepository, IProfileRepository profileRepository,
-            IProfileSyncService profileSyncService)
+            IProfileSyncService profileSyncService, IBlockSyncService blockSyncService)
         {
             _connectionRequestRepository = connectionRequestRepository;
             _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
             _profileSyncService = profileSyncService;
+            _blockSyncService = blockSyncService;
         }
 
         public async Task<Profile> Create(Profile profile)
         {
             if (await _profileRepository.GetByUsername(profile.Username) != null)
                 throw new EntityExistsException(typeof(Profile), "username");
-            return await _profileRepository.Save(profile);
+
+            await _profileRepository.Save(profile);
+
+            _profileSyncService.PublishAsync(profile, Events.Created);
+
+            return profile;
         }
 
         public async Task<Profile> GetById(Guid id)
@@ -155,6 +162,8 @@ namespace ProfileService.Service
 
             blocker.Blocked.Add(block);
             await _profileRepository.SaveChanges();
+
+            _blockSyncService.PublishAsync(block, Events.Created);
 
             return block;
         }
