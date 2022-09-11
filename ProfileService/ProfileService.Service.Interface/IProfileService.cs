@@ -15,6 +15,8 @@ namespace ProfileService.Service.Interface
         Task<IEnumerable<WorkExperience>> GetByIdWorkExperience(Guid id);
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);
+        Task<IEnumerable<Profile>> GetByNotBlocked(Guid profileId);
+        Task<IEnumerable<Profile>> GetByQueryAndNotBlocked(string query, Guid profileId);
         Task<Profile> Update(Guid id, Profile profile);
         Task<Block> Block(Guid id, Guid blockProfileId);
     }

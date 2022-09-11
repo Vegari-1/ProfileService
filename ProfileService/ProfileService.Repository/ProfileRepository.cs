@@ -95,6 +95,45 @@ namespace ProfileService.Repository
                                 .Include(x => x.Image)
                                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Profile>> GetByNotBlocked(Guid profileId)
+        {
+            List<Guid> blocks = await GetBlocksForProfile(profileId);
+            return await _context.Profiles
+                                .Where(x => x.Id != profileId)
+                                .Where(x => !blocks.Contains(x.Id))
+                                .Include(x => x.Image)
+                                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Profile>> GetByQueryAndNotBlocked(string query, Guid profileId)
+        {
+            List<Guid> blocks = await GetBlocksForProfile(profileId);
+            return await _context.Profiles
+                                .Where(x =>
+                                    x.Username.ToLower().Contains(query.ToLower())
+                                    || x.Name.ToLower().Contains(query.ToLower())
+                                    || x.Surname.ToLower().Contains(query.ToLower())
+                                )
+                                .Where(x => x.Id != profileId)
+                                .Where(x => !blocks.Contains(x.Id))
+                                .Include(x => x.Image)
+                                .ToListAsync();
+        }
+
+        private async Task<List<Guid>> GetBlocksForProfile(Guid profileId)
+        {
+            List<Guid> blocks = await _context.Blocks
+                                    .Where(x => x.BlockerId == profileId)
+                                    .Select(x => x.BlockedId)
+                                    .ToListAsync();
+            blocks.AddRange(await _context.Blocks
+                                    .Where(x => x.BlockedId == profileId)
+                                    .Select(x => x.BlockerId)
+                                    .ToListAsync());
+            return blocks;
+        }
+
     }
 }
 

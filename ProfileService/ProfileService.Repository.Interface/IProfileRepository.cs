@@ -17,5 +17,7 @@ namespace ProfileService.Repository.Interface
         Task<IEnumerable<Profile>> GetByPublic(bool isPublic);
         Task<IEnumerable<Profile>> GetByPublicAndQuery(bool isPublic, string query);
         Task<IEnumerable<Profile>> GetByIdList(IEnumerable<Guid> idList);
+        Task<IEnumerable<Profile>> GetByNotBlocked(Guid profileId);
+        Task<IEnumerable<Profile>> GetByQueryAndNotBlocked(string query, Guid profileId);
     }
 }

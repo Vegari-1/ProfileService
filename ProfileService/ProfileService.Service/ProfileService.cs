@@ -109,6 +109,16 @@ namespace ProfileService.Service
             return await _profileRepository.GetByPublicAndQuery(isPublic, query);
         }
 
+        public async Task<IEnumerable<Profile>> GetByNotBlocked(Guid profileId)
+        {
+            return await _profileRepository.GetByNotBlocked(profileId);
+        }
+
+        public async Task<IEnumerable<Profile>> GetByQueryAndNotBlocked(string query, Guid profileId)
+        {
+            return await _profileRepository.GetByQueryAndNotBlocked(query, profileId);
+        }
+
         public async Task<Profile> Update(Guid id, Profile profile)
         {
             if (!id.Equals(profile.Id))
