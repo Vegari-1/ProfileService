@@ -12,7 +12,7 @@ namespace ProfileService.IntegrationTests
             string tableName)
         {
             long totalRows = -1;
-            using (var connection = new NpgsqlConnection(factory.container.ConnectionString))
+            using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
             {
                 using (var command = new NpgsqlCommand())
                 {
@@ -40,7 +40,7 @@ namespace ProfileService.IntegrationTests
                                  "\"Phone\", \"Gender\", \"DateOfBirth\", \"Biography\") " +
                                  "VALUES (@Id, @UserId, @Public, @Name, @Surname, @Username, @Email, " +
                                  "@Phone, @Gender, @DateOfBirth, @Biography)";
-            using (var connection = new NpgsqlConnection(factory.container.ConnectionString))
+            using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
             {
                 using (var command = new NpgsqlCommand(insertQuery, connection))
                 {
@@ -64,7 +64,7 @@ namespace ProfileService.IntegrationTests
         public static void DeleteById(this IntegrationWebApplicationFactory<Program, AppDbContext> factory,
             string tableName, Guid id)
         {
-            using (var connection = new NpgsqlConnection(factory.container.ConnectionString))
+            using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
             {
                 using (var command = new NpgsqlCommand())
                 {
