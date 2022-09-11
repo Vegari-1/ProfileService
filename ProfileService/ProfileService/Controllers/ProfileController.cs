@@ -28,20 +28,30 @@ namespace ProfileService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchPublicProfiles(bool isPublic, string? query)
+        public async Task<IActionResult> SearchPublicProfiles(
+            [FromHeader(Name = "profile-id")] Guid? profileId,
+            bool? isPublic, string? query)
         {
             var actionName = ControllerContext.ActionDescriptor.DisplayName;
             using var scope = _tracer.BuildSpan(actionName).StartActive(true);
             scope.Span.Log("search public profiles");
             counter.Inc();
 
+            if (isPublic == null)
+                isPublic = true;
+
             IEnumerable<Model.Profile> profiles;
-            if (query != null)
+            if (profileId == null)
             {
-                profiles = await _profileService.GetByPublicAndQuery(isPublic, query);
-            } else
-            {
-                profiles = await _profileService.GetByPublic(isPublic);
+                if (query != null)
+                    profiles = await _profileService.GetByPublicAndQuery((bool)isPublic, query);
+                else
+                    profiles = await _profileService.GetByPublic((bool)isPublic);
+            } else { 
+                if (query != null)
+                profiles = await _profileService.GetByQueryAndNotBlocked(query, (Guid)profileId);
+                else
+                    profiles = await _profileService.GetByNotBlocked((Guid)profileId);
             }
 
             IEnumerable<ProfileSimpleResponse> profilesResponse =
