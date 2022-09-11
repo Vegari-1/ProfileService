@@ -1,4 +1,5 @@
-﻿using ProfileService.Model;
+﻿using BusService;
+using ProfileService.Model;
 using ProfileService.Repository.Interface;
 using ProfileService.Service.Interface;
 using ProfileService.Service.Interface.Exceptions;
@@ -14,12 +15,15 @@ namespace ProfileService.Service
         private readonly IConnectionRequestRepository _connectionRequestRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
+        private readonly IConnectionSyncService _connectionSyncService;
         public ConnectionRequestService(IConnectionRequestRepository connectionRequestRepository,
-            IConnectionRepository connectionRepository, IProfileRepository profileRepository)
+            IConnectionRepository connectionRepository, IProfileRepository profileRepository,
+            IConnectionSyncService connectionSyncService)
         {
             _connectionRequestRepository = connectionRequestRepository;
             _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
+            _connectionSyncService = connectionSyncService;
         }
 
         public async Task<Tuple<IEnumerable<ConnectionRequest>, IEnumerable<Profile>>> 
@@ -45,7 +49,11 @@ namespace ProfileService.Service
             };
 
             await _connectionRequestRepository.Delete(connReq);
-            return await _connectionRepository.Save(connection);
+            await _connectionRepository.Save(connection);
+
+            _connectionSyncService.PublishAsync(connection, Events.Created);
+
+            return connection;
         }
 
         public async Task Decline(Guid profileId, Guid id)

@@ -62,6 +62,8 @@ builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 
 // Sync services
 builder.Services.AddScoped<IProfileSyncService, ProfileSyncService>();
+builder.Services.AddScoped<IConnectionSyncService, ConnectionSyncService>();
+builder.Services.AddScoped<IBlockSyncService, BlockSyncService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
