@@ -12,6 +12,8 @@ using Jaeger.Samplers;
 using OpenTracing.Contrib.NetCore.Configuration;
 using OpenTracing.Util;
 using Prometheus;
+using BusService;
+using ProfileService.Messaging;
 
 var allowSpecificOrigins = "_allowSpecificOrigins";
 
@@ -28,13 +30,21 @@ builder.Services.AddCors(options =>
                           });
 });
 
+// Default Logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
-// Add services to the container.
+// Nats
+builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
+builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Nats"));
+builder.Services.AddHostedService<ProfileMessageBusService>();
+
+// Postgres
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DislinktDbConnection")));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-//repositories
+// Repositories
 builder.Services.AddScoped<IConnectionRequestRepository, ConnectionRequestRepository>();
 builder.Services.AddScoped<IConnectionRepository, ConnectionRepository>();
 builder.Services.AddScoped<IEducationRepository, EducationRepository>();
@@ -42,7 +52,7 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>();
 
-//services
+// Services
 builder.Services.AddScoped<IConnectionRequestService, ConnectionRequestService>();
 builder.Services.AddScoped<IConnectionService, ConnectionService>();
 builder.Services.AddScoped<IEducationService, EducationService>();
@@ -50,9 +60,13 @@ builder.Services.AddScoped<IProfileService, ProfileService.Service.ProfileServic
 builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 
+// Sync services
+builder.Services.AddScoped<IProfileSyncService, ProfileSyncService>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "ProfileService", Version = "v1" });

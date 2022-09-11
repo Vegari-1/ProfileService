@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ProfileService.Service.Interface.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
+using BusService;
 
 namespace ProfileService.Service
 {
@@ -14,13 +15,16 @@ namespace ProfileService.Service
         private readonly IConnectionRequestRepository _connectionRequestRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
+        private readonly IProfileSyncService _profileSyncService;
 
         public ProfileService(IConnectionRequestRepository connectionRequestRepository,
-            IConnectionRepository connectionRepository, IProfileRepository profileRepository)
+            IConnectionRepository connectionRepository, IProfileRepository profileRepository,
+            IProfileSyncService profileSyncService)
         {
             _connectionRequestRepository = connectionRequestRepository;
             _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
+            _profileSyncService = profileSyncService;
         }
 
         public async Task<Profile> Create(Profile profile)
@@ -116,6 +120,8 @@ namespace ProfileService.Service
             dbProfile.Biography = profile.Biography;
 
             await _profileRepository.SaveChanges();
+
+            _profileSyncService.PublishAsync(dbProfile, Events.Updated);
 
             return dbProfile;
         }
