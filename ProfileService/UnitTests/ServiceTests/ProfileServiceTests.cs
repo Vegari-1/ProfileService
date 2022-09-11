@@ -7,6 +7,7 @@ using Profile = ProfileService.Model.Profile;
 using ProfileService.Service.Interface.Exceptions;
 using System.Collections.Generic;
 using ProfileService.Repository.Interface;
+using ProfileService.Service.Interface;
 
 namespace ProfileService.UnitTests.ServiceTests
 {
@@ -34,8 +35,10 @@ namespace ProfileService.UnitTests.ServiceTests
         private static Mock<IProfileRepository> mockProfileRepo = new Mock<IProfileRepository>();
         private static Mock<IConnectionRepository> mockConnRepo = new Mock<IConnectionRepository>();
         private static Mock<IConnectionRequestRepository> mockConnReqRepo = new Mock<IConnectionRequestRepository>();
+        private static Mock<IProfileSyncService> mockProfileSyncService = new Mock<IProfileSyncService>();
 
-        private static Service.ProfileService profileService = new Service.ProfileService(mockConnReqRepo.Object, mockConnRepo.Object, mockProfileRepo.Object);
+        private static Service.ProfileService profileService = new Service.ProfileService(
+            mockConnReqRepo.Object, mockConnRepo.Object, mockProfileRepo.Object, mockProfileSyncService.Object);
 
         private static void SetUp()
         {
