@@ -24,7 +24,7 @@ namespace ProfileService.Service
         {
             var serialized = JsonConvert.SerializeObject(entity);
             var bData = Encoding.UTF8.GetBytes(serialized);
-            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Profile, Events.Updated), bData);
+            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Profile, action), bData);
             return Task.CompletedTask;
         }
 
