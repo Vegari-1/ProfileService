@@ -68,7 +68,14 @@ namespace ProfileService.Controllers
             scope.Span.Log("create profile");
             counter.Inc();
 
-            Model.Profile profile = await _profileService.Create(_mapper.Map<Model.Profile>(profileRequest));
+            Model.Profile profile = _mapper.Map<Model.Profile>(profileRequest);
+            if (profileRequest.Picture != null)
+                profile.Image = new Image
+                {
+                    Content = profileRequest.Picture
+                };
+
+            profile = await _profileService.Create(profile);
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 
