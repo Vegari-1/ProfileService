@@ -47,7 +47,6 @@ namespace ProfileService.UnitTests.ServiceTests
             savedProfile = new Profile()
             {
                 Id = id,
-                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
@@ -76,7 +75,6 @@ namespace ProfileService.UnitTests.ServiceTests
 
             Assert.IsType<Profile>(response);
             Assert.Equal(savedProfile.Id, response.Id);
-            Assert.Equal(savedProfile.UserId, response.UserId);
             Assert.Equal(savedProfile.Public, response.Public);
             Assert.Equal(savedProfile.Name, response.Name);
             Assert.Equal(savedProfile.Surname, response.Surname);
