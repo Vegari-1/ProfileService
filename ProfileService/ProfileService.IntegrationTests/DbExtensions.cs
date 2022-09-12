@@ -35,7 +35,7 @@ namespace ProfileService.IntegrationTests
             string tableName, Profile profile)
         {
             string insertQuery = "INSERT INTO \"" + tableName + 
-                                 "\" (\"Id\", \"UserId\", \"Public\", " +
+                                 "\" (\"Id\", \"Public\", " +
                                  "\"Name\", \"Surname\", \"Username\", \"Email\", " +
                                  "\"Phone\", \"Gender\", \"DateOfBirth\", \"Biography\") " +
                                  "VALUES (@Id, @UserId, @Public, @Name, @Surname, @Username, @Email, " +
@@ -46,7 +46,6 @@ namespace ProfileService.IntegrationTests
                 {
                     connection.Open();
                     command.Parameters.AddWithValue("@Id", profile.Id);
-                    command.Parameters.AddWithValue("@UserId", profile.UserId);
                     command.Parameters.AddWithValue("@Public", profile.Public);
                     command.Parameters.AddWithValue("@Name", profile.Name);
                     command.Parameters.AddWithValue("@Surname", profile.Surname);
