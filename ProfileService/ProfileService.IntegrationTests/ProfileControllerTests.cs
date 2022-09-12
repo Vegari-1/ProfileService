@@ -22,6 +22,7 @@ namespace ProfileService.IntegrationTests
             _client = _factory.CreateClient();
         }
 
+        private static readonly string schemaName = "profile";
         private static readonly string tableName = "Profiles";
         private static readonly Guid id = Guid.NewGuid();
         private static readonly Guid userId = Guid.NewGuid();
@@ -74,10 +75,10 @@ namespace ProfileService.IntegrationTests
             Assert.Equal(gender, responseContentObject.Gender);
             Assert.Equal(dateOfBirth, responseContentObject.DateOfBirth);
             Assert.Equal(biography, responseContentObject.Biography);
-            Assert.Equal(1L, _factory.CountTableRows(tableName));
+            Assert.Equal(1L, _factory.CountTableRows(schemaName, tableName));
 
             // Rollback
-            _factory.DeleteById(tableName, responseContentObject.Id);
+            _factory.DeleteById(schemaName, tableName, responseContentObject.Id);
         }
 
         [Fact]
@@ -97,7 +98,7 @@ namespace ProfileService.IntegrationTests
                 DateOfBirth = dateOfBirth,
                 Biography = biography
             };
-            _factory.Insert(tableName, profile);
+            _factory.Insert(schemaName, tableName, profile);
 
             // When
             var response = await _client.GetAsync("/api/profile?isPublic=true");
@@ -116,7 +117,7 @@ namespace ProfileService.IntegrationTests
             Assert.Null(responseObject.Picture);
 
             // Rollback
-            _factory.DeleteById(tableName, id);
+            _factory.DeleteById(schemaName, tableName, id);
         }
 
         [Fact]
@@ -136,7 +137,7 @@ namespace ProfileService.IntegrationTests
                 DateOfBirth = dateOfBirth,
                 Biography = biography
             };
-            _factory.Insert(tableName, profile);
+            _factory.Insert(schemaName, tableName, profile);
 
             // When
 
@@ -157,7 +158,7 @@ namespace ProfileService.IntegrationTests
             Assert.Contains(query, responseObject.Name);
 
             // Rollback
-            _factory.DeleteById(tableName, id);
+            _factory.DeleteById(schemaName, tableName, id);
         }
     }
 }

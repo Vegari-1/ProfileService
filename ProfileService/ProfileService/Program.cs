@@ -15,22 +15,9 @@ using Prometheus;
 using BusService;
 using ProfileService.Messaging;
 
-var allowSpecificOrigins = "_allowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(allowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("http://localhost:3000")
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod();
-                          });
-});
 
 // Default Logger
 builder.Logging.ClearProviders();
@@ -119,14 +106,15 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 
-// Run all migrations
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+// Run all migrations only on Docker container
+if (dbHost != null)
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
-}
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate();
+    }
 
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
@@ -135,10 +123,6 @@ if (builder.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProfileService v1"));
 }
-
-app.UseCors(allowSpecificOrigins);
-
-app.UseAuthorization();
 
 app.MapControllers();
 
