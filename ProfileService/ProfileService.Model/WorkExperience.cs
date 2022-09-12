@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfileService.Model
 {
-	public class WorkExperience
+    [Table("WorkExperiences", Schema = "profile")]
+    public class WorkExperience
 	{
         public Guid Id { get; set; }
         public string Position { get; set; }

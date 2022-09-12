@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfileService.Model
 {
-	public class Connection : IConnection
+    [Table("Connections", Schema = "profile")]
+    public class Connection : IConnection
 	{
         public Guid Id { get; set; }
         public Guid Profile1 { get; set; }
