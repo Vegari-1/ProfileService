@@ -19,6 +19,8 @@ var allowSpecificOrigins = "_allowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(allowSpecificOrigins,
@@ -36,12 +38,21 @@ builder.Logging.AddConsole();
 
 // Nats
 builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
+//builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Default"));
 builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Nats"));
 builder.Services.AddHostedService<ProfileMessageBusService>();
 
 // Postgres
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DislinktDbConnection")));
+// DB_HOST from Docker-Compose or Local if null
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+if (dbHost == null)
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("DislinktDbConnection"),
+            x => x.MigrationsHistoryTable("__MigrationsHistory", "profile")));
+else
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(dbHost, x => x.MigrationsHistoryTable("__MigrationsHistory", "profile")));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Repositories
@@ -101,9 +112,21 @@ builder.Services.Configure<HttpHandlerDiagnosticOptions>(options =>
         options.OperationNameResolver =
             request => $"{request.Method.Method}: {request?.RequestUri?.AbsoluteUri}");
 
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80);
+});
 
 var app = builder.Build();
+
+// Run all migrations
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
