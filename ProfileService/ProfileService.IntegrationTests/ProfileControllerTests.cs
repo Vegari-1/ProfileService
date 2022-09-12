@@ -88,7 +88,6 @@ namespace ProfileService.IntegrationTests
             Profile profile = new Profile()
             {
                 Id = id,
-                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
@@ -128,7 +127,6 @@ namespace ProfileService.IntegrationTests
             Profile profile = new Profile()
             {
                 Id = id,
-                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
