@@ -3,8 +3,11 @@ WORKDIR /app
 EXPOSE 5003
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+ARG github_username
+ARG github_pat
 WORKDIR /src
 COPY ProfileService/ProfileService.csproj ProfileService/
+COPY config/NuGet.Config .
 RUN dotnet restore ProfileService/ProfileService.csproj
 COPY . .
 WORKDIR /src/ProfileService
