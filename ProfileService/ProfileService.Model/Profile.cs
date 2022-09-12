@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfileService.Model
 {
-	public class Profile
+    [Table("Profiles", Schema = "profile")]
+    public class Profile
 	{
 		public Guid Id { get; set; }
         public bool Public { get; set; }

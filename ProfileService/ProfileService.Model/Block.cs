@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfileService.Model
 {
+    [Table("Blocks", Schema = "profile")]
     public class Block
     {
         public Guid Id { get; set; }

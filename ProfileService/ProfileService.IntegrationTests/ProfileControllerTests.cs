@@ -44,7 +44,6 @@ namespace ProfileService.IntegrationTests
             // Given
             ProfileRequest profileRequest = new ProfileRequest()
             {
-                UserId = userId,
                 Public = profilePublic,
                 Name = name,
                 Surname = surname,
