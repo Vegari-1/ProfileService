@@ -9,7 +9,7 @@ namespace ProfileService.IntegrationTests
     {
 
         public static long CountTableRows(this IntegrationWebApplicationFactory<Program, AppDbContext> factory,
-            string tableName)
+            string schemaName, string tableName)
         {
             long totalRows = -1;
             using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
@@ -18,7 +18,7 @@ namespace ProfileService.IntegrationTests
                 {
                     connection.Open();
                     command.Connection = connection;
-                    command.CommandText = "SELECT COUNT(*) FROM \"" + tableName + "\"";
+                    command.CommandText = "SELECT COUNT(*) FROM " + schemaName + ".\"" + tableName + "\"";
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -32,13 +32,13 @@ namespace ProfileService.IntegrationTests
         }
 
         public static void Insert(this IntegrationWebApplicationFactory<Program, AppDbContext> factory,
-            string tableName, Profile profile)
+            string schemaName, string tableName, Profile profile)
         {
-            string insertQuery = "INSERT INTO \"" + tableName + 
+            string insertQuery = "INSERT INTO " + schemaName + ".\"" + tableName + 
                                  "\" (\"Id\", \"Public\", " +
                                  "\"Name\", \"Surname\", \"Username\", \"Email\", " +
                                  "\"Phone\", \"Gender\", \"DateOfBirth\", \"Biography\") " +
-                                 "VALUES (@Id, @UserId, @Public, @Name, @Surname, @Username, @Email, " +
+                                 "VALUES (@Id, @Public, @Name, @Surname, @Username, @Email, " +
                                  "@Phone, @Gender, @DateOfBirth, @Biography)";
             using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
             {
@@ -61,7 +61,7 @@ namespace ProfileService.IntegrationTests
         }
 
         public static void DeleteById(this IntegrationWebApplicationFactory<Program, AppDbContext> factory,
-            string tableName, Guid id)
+            string schemaName, string tableName, Guid id)
         {
             using (var connection = new NpgsqlConnection(factory.postgresContainer.ConnectionString))
             {
@@ -69,7 +69,7 @@ namespace ProfileService.IntegrationTests
                 {
                     connection.Open();
                     command.Connection = connection;
-                    command.CommandText = "DELETE FROM \"" + tableName + "\" WHERE \"Id\" = @id";
+                    command.CommandText = "DELETE FROM " + schemaName + ".\"" + tableName + "\" WHERE \"Id\" = @id";
                     command.Parameters.AddWithValue("@id", id);
                     command.ExecuteNonQuery();
                 }
