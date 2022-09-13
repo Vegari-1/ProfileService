@@ -23,15 +23,23 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
+// DB_HOST from Docker-Compose or Local if null
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+
 // Nats
 builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
-//builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Default"));
-builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Nats"));
+if (dbHost == null)
+    builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Default"));
+else
+{
+    Console.WriteLine("DOCKER CONFIG");
+    var natsConfig = builder.Configuration.GetSection("Nats");
+    Console.WriteLine(natsConfig.GetValue(typeof(string), "Url"));
+    builder.Services.Configure<MessageBusSettings>(natsConfig);
+}
 builder.Services.AddHostedService<ProfileMessageBusService>();
 
 // Postgres
-// DB_HOST from Docker-Compose or Local if null
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 if (dbHost == null)
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(
