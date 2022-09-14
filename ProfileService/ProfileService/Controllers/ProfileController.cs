@@ -15,14 +15,17 @@ namespace ProfileService.Controllers
     {
 
         private readonly IProfileService _profileService;
+        private readonly IJobOfferService _jobOfferService;
         private readonly IMapper _mapper;
         private readonly ITracer _tracer;
 
         Counter counter = Metrics.CreateCounter("profile_service_counter", "profile counter");
 
-        public ProfileController(IProfileService profileSerivce, IMapper mapper, ITracer tracer)
+        public ProfileController(IProfileService profileSerivce, IJobOfferService jobOfferService,
+            IMapper mapper, ITracer tracer)
         {
             _profileService = profileSerivce;
+            _jobOfferService = jobOfferService;
             _mapper = mapper;
             _tracer = tracer;
         }
@@ -201,6 +204,20 @@ namespace ProfileService.Controllers
             BlockResponse blockResponse = _mapper.Map<BlockResponse>(block);
 
             return Ok(blockResponse);
+        }
+
+        [HttpPost]
+        [Route("share-job-offer")]
+        public async Task<IActionResult> ShareJobOffer([FromBody] JobOfferRequest jobOfferRequest)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("share job offer");
+            counter.Inc();
+
+            await _jobOfferService.ShareJobOffer(jobOfferRequest.ApiKey, _mapper.Map<JobOffer>(jobOfferRequest));
+
+            return Ok();
         }
 
     }

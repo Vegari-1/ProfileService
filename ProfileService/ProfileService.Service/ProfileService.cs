@@ -177,6 +177,5 @@ namespace ProfileService.Service
 
             return block;
         }
-
     }
 }
