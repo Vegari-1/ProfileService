@@ -30,10 +30,12 @@ namespace ProfileService.Service
         public async Task ShareJobOffer(string apiKey, JobOffer jobOffer)
         {
             Profile profile = await _profileRepository.GetByApiKey(apiKey);
+            if (profile == null)
+                throw new EntityNotFoundException(typeof(Profile), "ApiKey");
+
             jobOffer.GlobalId = profile.Id.ToString();
 
             var requestContent = new StringContent(JsonConvert.SerializeObject(jobOffer), Encoding.UTF8, "application/json");
-            Console.WriteLine(requestContent);
             try
             {
                 var response = await _client.PostAsync(jobOfferServiceUrl + "/api/joboffer", requestContent);
