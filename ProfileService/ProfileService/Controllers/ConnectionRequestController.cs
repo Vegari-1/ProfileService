@@ -5,7 +5,6 @@ using ProfileService.Dto;
 using ProfileService.Model;
 using ProfileService.Service.Interface;
 using Prometheus;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProfileService
