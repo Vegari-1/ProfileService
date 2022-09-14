@@ -17,6 +17,7 @@ namespace ProfileService.Model
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Biography { get; set; }
+        public string? ApiKey { get; set; }
         public Guid? ImageId { get; set; }
         public virtual Image Image { get; set; }
 

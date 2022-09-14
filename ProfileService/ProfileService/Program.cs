@@ -56,6 +56,8 @@ builder.Services.AddScoped<IEducationService, EducationService>();
 builder.Services.AddScoped<IProfileService, ProfileService.Service.ProfileService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
+builder.Services.AddScoped<IJobOfferService, JobOfferService>();
+
 
 // Sync services
 builder.Services.AddScoped<IProfileSyncService, ProfileSyncService>();
