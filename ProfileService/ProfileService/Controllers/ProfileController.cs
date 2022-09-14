@@ -101,21 +101,31 @@ namespace ProfileService.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetProfile(
-            [FromHeader(Name = "profile-id")] Guid? profileId,
-            Guid id)
+        public async Task<IActionResult> GetProfile(Guid id)
         {
             var actionName = ControllerContext.ActionDescriptor.DisplayName;
             using var scope = _tracer.BuildSpan(actionName).StartActive(true);
             scope.Span.Log("get profile by id");
             counter.Inc();
 
-            int status = 0;
-            Model.Profile profile;
-            if (profileId == null)
-                profile = await _profileService.GetById(id);
-            else
-                (profile, status) = await _profileService.GetByIdForProfile(id, (Guid)profileId);
+            Model.Profile profile = await _profileService.GetById(id);
+            ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
+
+            return Ok(profileResponse);
+        }
+
+        [HttpGet]
+        [Route("auth/{id}")]
+        public async Task<IActionResult> GetProfileAuthenticated(
+            [FromHeader(Name = "profile-id")] Guid profileId,
+            Guid id)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("get profile by id for authenticated");
+            counter.Inc();
+
+            (Model.Profile profile, int status) = await _profileService.GetByIdForProfile(id, (Guid)profileId);
 
             ProfileResponse profileResponse = _mapper.Map<ProfileResponse>(profile);
 

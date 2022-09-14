@@ -14,29 +14,20 @@ using OpenTracing.Util;
 using Prometheus;
 using BusService;
 using ProfileService.Messaging;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-// Default Logger
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
 // DB_HOST from Docker-Compose or Local if null
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 
 // Nats
+builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Nats"));
+builder.Services.AddSingleton<IMessageBusSettings>(serviceProvider =>
+    serviceProvider.GetRequiredService<IOptions<MessageBusSettings>>().Value);
 builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
-if (dbHost == null)
-    builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Default"));
-else
-{
-    Console.WriteLine("DOCKER CONFIG");
-    var natsConfig = builder.Configuration.GetSection("Nats");
-    Console.WriteLine(natsConfig.GetValue(typeof(string), "Url"));
-    builder.Services.Configure<MessageBusSettings>(natsConfig);
-}
 builder.Services.AddHostedService<ProfileMessageBusService>();
 
 // Postgres
@@ -106,11 +97,6 @@ builder.Services.AddSingleton<ITracer>(sp =>
 builder.Services.Configure<HttpHandlerDiagnosticOptions>(options =>
         options.OperationNameResolver =
             request => $"{request.Method.Method}: {request?.RequestUri?.AbsoluteUri}");
-
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(80);
-});
 
 var app = builder.Build();
 
