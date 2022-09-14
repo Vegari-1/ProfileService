@@ -19,5 +19,6 @@ namespace ProfileService.Service.Interface
         Task<IEnumerable<Profile>> GetByQueryAndNotBlocked(string query, Guid profileId);
         Task<Profile> Update(Guid id, Profile profile);
         Task<Block> Block(Guid id, Guid blockProfileId);
+        Task<string> UpdateApiKey(Guid id);
     }
 }
