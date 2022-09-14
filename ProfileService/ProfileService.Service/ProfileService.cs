@@ -177,5 +177,16 @@ namespace ProfileService.Service
 
             return block;
         }
+
+        public async Task<string> UpdateApiKey(Guid id)
+        {
+            Profile profile = await _profileRepository.GetById(id);
+            if (profile == null)
+                throw new EntityNotFoundException(typeof(Profile), "id");
+
+            profile.ApiKey = Guid.NewGuid().ToString("N");
+            await _profileRepository.SaveChanges();
+            return profile.ApiKey;
+        }
     }
 }

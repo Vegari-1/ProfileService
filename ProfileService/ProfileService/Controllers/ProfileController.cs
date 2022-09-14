@@ -220,5 +220,19 @@ namespace ProfileService.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("api-key")]
+        public async Task<IActionResult> UpdateApiKey([FromHeader(Name = "profile-id")][Required] Guid id)
+        {
+            var actionName = ControllerContext.ActionDescriptor.DisplayName;
+            using var scope = _tracer.BuildSpan(actionName).StartActive(true);
+            scope.Span.Log("update api key");
+            counter.Inc();
+
+            string apiKey = await _profileService.UpdateApiKey(id);
+
+            return Ok(apiKey);
+        }
+
     }
 }
