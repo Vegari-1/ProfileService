@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProfileService.Service
 {
-    public class BlockSyncService : ConsumerBase<Block, ProfileContract>, IBlockSyncService
+    public class BlockSyncService : ConsumerBase<Block, ConnectionContract>, IBlockSyncService
     {
         private readonly IMessageBusService _messageBusService;
 
@@ -22,19 +22,15 @@ namespace ProfileService.Service
 
         public override Task PublishAsync(Block entity, string action)
         {
-            Connection connection = new Connection { 
-                Id = entity.Id,
-                Profile1 = entity.BlockerId,
-                Profile2 = entity.BlockedId
-            };
-                
+            ConnectionContract connection = new ConnectionContract(entity.Id, entity.BlockerId, entity.BlockedId);
+
             var serialized = JsonConvert.SerializeObject(connection);
             var bData = Encoding.UTF8.GetBytes(serialized);
-            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Profile, action), bData);
+            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Block, action), bData);
             return Task.CompletedTask;
         }
 
-        public override Task SynchronizeAsync(ProfileContract entity, string action)
+        public override Task SynchronizeAsync(ConnectionContract entity, string action)
         {
             throw new NotImplementedException();
         }

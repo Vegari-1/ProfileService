@@ -29,6 +29,8 @@ builder.Services.AddSingleton<IMessageBusSettings>(serviceProvider =>
     serviceProvider.GetRequiredService<IOptions<MessageBusSettings>>().Value);
 builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
 builder.Services.AddHostedService<ProfileMessageBusService>();
+builder.Services.AddHostedService<ConnectionMessageBusService>();
+builder.Services.AddHostedService<BlockMessageBusService>();
 
 // Postgres
 if (dbHost == null)

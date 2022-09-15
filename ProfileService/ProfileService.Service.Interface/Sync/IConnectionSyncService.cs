@@ -4,7 +4,7 @@ using ProfileService.Model;
 
 namespace ProfileService.Service.Interface
 {
-    public interface IConnectionSyncService : ISyncService<Connection, ProfileContract>
+    public interface IConnectionSyncService : ISyncService<Connection, ConnectionContract>
     {
     }
 }
