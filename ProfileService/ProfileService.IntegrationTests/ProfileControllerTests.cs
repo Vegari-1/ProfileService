@@ -54,7 +54,7 @@ namespace ProfileService.IntegrationTests
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Biography = biography,
-                //Picture = picture
+                Picture = picture
             };
             var requestContent = new StringContent(JsonConvert.SerializeObject(profileRequest), Encoding.UTF8, "application/json");
 
