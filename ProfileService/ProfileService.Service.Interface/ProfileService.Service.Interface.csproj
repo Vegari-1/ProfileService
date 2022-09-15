@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BusService" Version="1.0.0-dev.11" />
+    <PackageReference Include="BusService" Version="1.0.0-dev.12" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProfileService.Model\ProfileService.Model.csproj" />

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProfileService.Service
 {
-    public class ConnectionSyncService : ConsumerBase<Connection, ProfileContract>, IConnectionSyncService
+    public class ConnectionSyncService : ConsumerBase<Connection, ConnectionContract>, IConnectionSyncService
     {
         private readonly IMessageBusService _messageBusService;
 
@@ -24,11 +24,11 @@ namespace ProfileService.Service
         {
             var serialized = JsonConvert.SerializeObject(entity);
             var bData = Encoding.UTF8.GetBytes(serialized);
-            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Profile, action), bData);
+            _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Connection, action), bData);
             return Task.CompletedTask;
         }
 
-        public override Task SynchronizeAsync(ProfileContract entity, string action)
+        public override Task SynchronizeAsync(ConnectionContract entity, string action)
         {
             throw new NotImplementedException();
         }

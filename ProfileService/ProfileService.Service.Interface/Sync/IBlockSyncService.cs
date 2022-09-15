@@ -4,7 +4,7 @@ using ProfileService.Model;
 
 namespace ProfileService.Service.Interface
 {
-    public interface IBlockSyncService : ISyncService<Block, ProfileContract>
+    public interface IBlockSyncService : ISyncService<Block, ConnectionContract>
     {
     }
 }

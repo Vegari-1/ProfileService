@@ -22,7 +22,10 @@ namespace ProfileService.Service
 
         public override Task PublishAsync(Profile entity, string action)
         {
-            var serialized = JsonConvert.SerializeObject(entity);
+            ProfileContract contract = new(entity.Id, entity.Name, entity.Surname, 
+                entity.Email, entity.Username, entity.Image.Content);
+
+            var serialized = JsonConvert.SerializeObject(contract);
             var bData = Encoding.UTF8.GetBytes(serialized);
             _messageBusService.PublishEvent(SubjectBuilder.Build(Topics.Profile, action), bData);
             return Task.CompletedTask;
