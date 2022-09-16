@@ -1,7 +1,5 @@
 ﻿using BusService;
-using BusService.Routing;
 using Polly;
-using ProfileService.Service.Interface;
 
 namespace ProfileService.Messaging
 {
