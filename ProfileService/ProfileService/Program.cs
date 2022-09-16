@@ -15,6 +15,7 @@ using Prometheus;
 using BusService;
 using ProfileService.Messaging;
 using Microsoft.Extensions.Options;
+using ProfileService.Middlewares.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Configuration.AddEnvironmentVariables();
 
 // DB_HOST from Docker-Compose or Local if null
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+
+builder.Services.Configure<AppConfig>(
+    builder.Configuration.GetSection("AppConfig"));
 
 // Nats
 builder.Services.Configure<MessageBusSettings>(builder.Configuration.GetSection("Nats"));
@@ -31,6 +35,7 @@ builder.Services.AddSingleton<IMessageBusService, MessageBusService>();
 builder.Services.AddHostedService<ProfileMessageBusService>();
 builder.Services.AddHostedService<ConnectionMessageBusService>();
 builder.Services.AddHostedService<BlockMessageBusService>();
+builder.Services.AddHostedService<EventMessageBusService>();
 
 // Postgres
 if (dbHost == null)
@@ -65,6 +70,7 @@ builder.Services.AddScoped<IJobOfferService, JobOfferService>();
 builder.Services.AddScoped<IProfileSyncService, ProfileSyncService>();
 builder.Services.AddScoped<IConnectionSyncService, ConnectionSyncService>();
 builder.Services.AddScoped<IBlockSyncService, BlockSyncService>();
+builder.Services.AddScoped<IEventSyncService, EventSyncService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -125,6 +131,7 @@ if (builder.Environment.IsDevelopment())
 app.MapControllers();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseEventSenderMiddleware();
 
 // Prometheus metrics
 app.UseMetricServer();
