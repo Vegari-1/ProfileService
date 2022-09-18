@@ -35,12 +35,14 @@ namespace ProfileService.UnitTests.ServiceTests
         private static Mock<IProfileRepository> mockProfileRepo = new Mock<IProfileRepository>();
         private static Mock<IConnectionRepository> mockConnRepo = new Mock<IConnectionRepository>();
         private static Mock<IConnectionRequestRepository> mockConnReqRepo = new Mock<IConnectionRequestRepository>();
+        private static Mock<IConnectionSyncService> mockConnectionSyncService = new Mock<IConnectionSyncService>();
         private static Mock<IProfileSyncService> mockProfileSyncService = new Mock<IProfileSyncService>();
         private static Mock<IBlockSyncService> mockBlockSyncService = new Mock<IBlockSyncService>();
 
         private static Service.ProfileService profileService = new Service.ProfileService(
             mockConnReqRepo.Object, mockConnRepo.Object, mockProfileRepo.Object, 
-            mockProfileSyncService.Object, mockBlockSyncService.Object);
+            mockConnectionSyncService.Object, mockProfileSyncService.Object, 
+            mockBlockSyncService.Object);
 
         private static void SetUp()
         {
