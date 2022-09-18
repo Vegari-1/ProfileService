@@ -15,6 +15,7 @@ namespace ProfileService.Service
         private readonly IConnectionRequestRepository _connectionRequestRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly IProfileRepository _profileRepository;
+        private readonly IConnectionSyncService _connectionSyncService;
         private readonly IProfileSyncService _profileSyncService;
         private readonly IBlockSyncService _blockSyncService;
 
@@ -172,8 +173,11 @@ namespace ProfileService.Service
 
             blocker.Blocked.Add(block);
             await _profileRepository.SaveChanges();
-
             _blockSyncService.PublishAsync(block, Events.Created);
+
+            Connection conn = await _connectionRepository.GetByProfileIdAndLinkId(blocker.Id, blocked.Id);
+            await _connectionRepository.Delete(conn);
+            _connectionSyncService.PublishAsync(conn, Events.Deleted);
 
             return block;
         }
