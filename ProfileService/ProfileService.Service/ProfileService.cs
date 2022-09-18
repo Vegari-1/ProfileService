@@ -21,11 +21,13 @@ namespace ProfileService.Service
 
         public ProfileService(IConnectionRequestRepository connectionRequestRepository,
             IConnectionRepository connectionRepository, IProfileRepository profileRepository,
-            IProfileSyncService profileSyncService, IBlockSyncService blockSyncService)
+            IConnectionSyncService connectionSyncService, IProfileSyncService profileSyncService, 
+            IBlockSyncService blockSyncService)
         {
             _connectionRequestRepository = connectionRequestRepository;
             _connectionRepository = connectionRepository;
             _profileRepository = profileRepository;
+            _connectionSyncService = connectionSyncService;
             _profileSyncService = profileSyncService;
             _blockSyncService = blockSyncService;
         }
