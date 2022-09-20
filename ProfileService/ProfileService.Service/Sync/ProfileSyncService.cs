@@ -22,8 +22,11 @@ namespace ProfileService.Service
 
         public override Task PublishAsync(Profile entity, string action)
         {
+            string avatar = null;
+            if (entity.Image != null)
+                avatar = entity.Image.Content;
             ProfileContract contract = new(entity.Id, entity.Name, entity.Surname, 
-                entity.Email, entity.Username, entity.Image.Content);
+                entity.Email, entity.Username, avatar);
 
             var serialized = JsonConvert.SerializeObject(contract);
             var bData = Encoding.UTF8.GetBytes(serialized);
