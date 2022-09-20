@@ -33,15 +33,18 @@ namespace ProfileService.Service
             if (profile == null)
                 throw new EntityNotFoundException(typeof(Profile), "ApiKey");
 
-            jobOffer.GlobalId = profile.Id.ToString();
-
             var requestContent = new StringContent(JsonConvert.SerializeObject(jobOffer), Encoding.UTF8, "application/json");
             try
             {
-                var response = await _client.PostAsync(jobOfferServiceUrl + "/api/joboffer", requestContent);
-                var responseContentString = await response.Content.ReadAsStringAsync();
-                var responseContentObject = JsonConvert.DeserializeObject<Profile>(responseContentString);
-                return;
+                using (var request = new HttpRequestMessage(HttpMethod.Post, jobOfferServiceUrl + "/api/joboffer"))
+                {
+                    request.Headers.Add("profile-id", profile.Id.ToString());
+                    request.Content = requestContent;
+                    var response = await _client.SendAsync(request);
+
+                    await response.Content.ReadAsStringAsync();
+                    return;
+                }
             }
             catch (HttpRequestException ex)
             {
